@@ -1,5 +1,20 @@
 import React from 'react';
-import { X, Code2, ShieldAlert, BookOpen, Calculator, Send, CheckCircle2 } from 'lucide-react';
+import {
+  Box,
+  Drawer,
+  Typography,
+  IconButton,
+  Chip,
+  Divider,
+  Paper,
+  Alert,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import CodeIcon from '@mui/icons-material/Code';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import CalculateIcon from '@mui/icons-material/Calculate';
+import SendIcon from '@mui/icons-material/Send';
 
 interface NodeDetailDrawerProps {
   selectedNodeId: string | null;
@@ -7,150 +22,126 @@ interface NodeDetailDrawerProps {
   onClose: () => void;
 }
 
-export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
-  selectedNodeId,
-  agentOutputs,
-  onClose
-}) => {
+export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ selectedNodeId, agentOutputs, onClose }) => {
   if (!selectedNodeId) return null;
 
   const getAgentData = () => {
     switch (selectedNodeId) {
       case 'intake_agent':
-        return {
-          title: '1. Intake Agent',
-          description: 'Reads mechanic invoice and claimant narrative, masks sensitive private info (SSN, phone, email), and verifies invoice math.',
-          data: agentOutputs['intake'] || { status: 'Awaiting execution' },
-        };
+        return { title: '1. Intake Agent', description: 'Reads mechanic invoice and claimant narrative, masks PII (SSN, phone, email), and verifies invoice line-item math.', data: agentOutputs['intake'] || { status: 'Awaiting execution' } };
       case 'policy_agent':
-        return {
-          title: '2. Policy Agent (RAG)',
-          description: 'Checks policy terms to confirm if the damage is covered, verifies active dates, and cites exact policy sections.',
-          data: agentOutputs['policy'] || { status: 'Awaiting execution' },
-        };
+        return { title: '2. Policy Agent (RAG)', description: 'Validates active policy dates, searches policy clauses for coverage and exclusions, and returns verbatim citations.', data: agentOutputs['policy'] || { status: 'Awaiting execution' } };
       case 'fraud_agent':
-        return {
-          title: '3. Fraud Agent (ML)',
-          description: 'Uses machine learning and business rules to evaluate suspicious factors (close bound date, mismatched parts) and computes a 0-100 score.',
-          data: agentOutputs['fraud'] || { status: 'Awaiting execution' },
-        };
+        return { title: '3. Fraud Agent (ML)', description: 'Uses machine learning and business rules to evaluate risk factors and computes a 0–100 fraud probability score.', data: agentOutputs['fraud'] || { status: 'Awaiting execution' } };
       case 'subrogation_agent':
-        return {
-          title: '4. Subrogation Agent',
-          description: 'Identifies if another driver or company caused the crash, and drafts a recovery letter to claim money back from their insurance.',
-          data: agentOutputs['subrogation'] || { status: 'Awaiting execution' },
-        };
+        return { title: '4. Subrogation Agent', description: 'Identifies at-fault third parties from police citations and narrative cues, and drafts a recovery referral brief.', data: agentOutputs['subrogation'] || { status: 'Awaiting execution' } };
       case 'estimator_agent':
-        return {
-          title: '5. Estimator Agent (Math)',
-          description: 'Calculates the exact payout using strict Python math: Approved Total minus Deductible. The AI model never guesses numbers.',
-          data: agentOutputs['estimator'] || { status: 'Awaiting execution' },
-        };
+        return { title: '5. Estimator Agent (Math)', description: 'Calculates exact payout using strict Python math: max(0, min(approved, limit) − deductible). No LLM arithmetic.', data: agentOutputs['estimator'] || { status: 'Awaiting execution' } };
       case 'adjudicator_agent':
-        return {
-          title: '6. Decision Agent',
-          description: 'Determines whether to auto-approve straight through, or pause and send to a human adjuster for review.',
-          data: agentOutputs['adjudication'] || { status: 'Awaiting execution' },
-        };
+        return { title: '6. Decision Agent', description: 'Applies governance rules to auto-approve or pause the claim for human adjuster review in durable checkpoint state.', data: agentOutputs['adjudication'] || { status: 'Awaiting execution' } };
       default:
-        return {
-          title: 'Agent Inspector',
-          description: 'Select an agent box in the diagram to inspect its results.',
-          data: {},
-        };
+        return { title: 'Agent Inspector', description: 'Select an agent node to inspect.', data: {} };
     }
   };
 
   const info = getAgentData();
 
   return (
-    <div className="fixed inset-y-0 right-0 w-full max-w-xl bg-slate-950 border-l border-slate-800 shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-in slide-in-from-right duration-200">
+    <Drawer
+      anchor="right"
+      open={!!selectedNodeId}
+      onClose={onClose}
+      slotProps={{
+        paper: {
+          sx: { width: { xs: '100%', sm: 480 }, bgcolor: '#0F172A', borderLeft: '1px solid #1E293B' },
+        },
+      }}
+    >
       {/* Header */}
-      <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-        <div>
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Code2 className="w-5 h-5 text-cyan-400" />
-            {info.title}
-          </h3>
-          <p className="text-xs text-slate-400 mt-1 leading-relaxed">{info.description}</p>
-        </div>
-        <button
-          onClick={onClose}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
+      <Box sx={{ p: 3, borderBottom: '1px solid #1E293B', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+            <CodeIcon sx={{ color: 'secondary.main', fontSize: 20 }} />
+            <Typography variant="h6" sx={{ fontSize: '1rem' }}>{info.title}</Typography>
+          </Box>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.78rem', lineHeight: 1.6 }}>{info.description}</Typography>
+        </Box>
+        <IconButton onClick={onClose} size="small" sx={{ color: 'text.secondary' }}>
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </Box>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-5">
-        {/* Special Sections Based on Agent */}
+      <Box sx={{ p: 3, overflow: 'auto', flexGrow: 1 }}>
+        {/* Policy Citations */}
         {selectedNodeId === 'policy_agent' && info.data.citations && (
-          <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
-            <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4" /> Cited Policy Rules
-            </h4>
-            <div className="space-y-2">
-              {info.data.citations.map((c: any, i: number) => (
-                <div key={i} className="text-xs bg-slate-950 p-3 rounded-lg border border-slate-800/80">
-                  <div className="font-semibold text-slate-200 mb-1">{c.section_ref} (Page {c.page_num})</div>
-                  <blockquote className="italic text-slate-400 border-l-2 border-emerald-500 pl-2">
-                    "{c.quote}"
-                  </blockquote>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#111827' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1.5 }}>
+              <MenuBookIcon sx={{ fontSize: 16, color: 'success.main' }} />
+              <Typography variant="overline" sx={{ color: 'success.main' }}>Policy Citations (RAG)</Typography>
+            </Box>
+            {info.data.citations.map((c: any, i: number) => (
+              <Box key={i} sx={{ p: 1.5, mb: 1, bgcolor: '#0B1120', borderRadius: 2, borderLeft: '3px solid #10B981' }}>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: '#E2E8F0', mb: 0.3 }}>{c.section_ref} (Page {c.page_num})</Typography>
+                <Typography sx={{ fontSize: '0.72rem', fontStyle: 'italic', color: '#94A3B8', lineHeight: 1.5 }}>"{c.quote}"</Typography>
+              </Box>
+            ))}
+          </Paper>
         )}
 
+        {/* Fraud Risk Drivers */}
         {selectedNodeId === 'fraud_agent' && info.data.risk_drivers && (
-          <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
-            <h4 className="text-xs font-bold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <ShieldAlert className="w-4 h-4" /> Detected Risk Factors
-            </h4>
-            <ul className="text-xs space-y-1.5 text-slate-300">
-              {info.data.risk_drivers.map((d: string, i: number) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
-                  <span>{d}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#111827' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1.5 }}>
+              <WarningAmberIcon sx={{ fontSize: 16, color: 'error.main' }} />
+              <Typography variant="overline" sx={{ color: 'error.main' }}>Detected Risk Factors</Typography>
+            </Box>
+            {info.data.risk_drivers.map((d: string, i: number) => (
+              <Box key={i} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 0.8 }}>
+                <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: 'error.main', mt: 0.8, flexShrink: 0 }} />
+                <Typography sx={{ fontSize: '0.75rem', color: '#CBD5E1' }}>{d}</Typography>
+              </Box>
+            ))}
+          </Paper>
         )}
 
+        {/* Estimator Formula */}
         {selectedNodeId === 'estimator_agent' && info.data.formula_log && (
-          <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
-            <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Calculator className="w-4 h-4" /> Exact Deterministic Math Formula
-            </h4>
-            <p className="text-xs font-mono text-amber-300/90 bg-slate-950 p-3 rounded-lg border border-slate-800/80">
-              {info.data.formula_log}
-            </p>
-          </div>
+          <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#111827' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1 }}>
+              <CalculateIcon sx={{ fontSize: 16, color: 'warning.main' }} />
+              <Typography variant="overline" sx={{ color: 'warning.main' }}>Deterministic Math Formula</Typography>
+            </Box>
+            <Box sx={{ p: 1.5, bgcolor: '#0B1120', borderRadius: 2, border: '1px solid #1E293B' }}>
+              <Typography sx={{ fontSize: '0.72rem', fontFamily: 'monospace', color: '#FBBF24', lineHeight: 1.6 }}>{info.data.formula_log}</Typography>
+            </Box>
+          </Paper>
         )}
 
+        {/* Guidewire Payload */}
         {selectedNodeId === 'adjudicator_agent' && info.data.guidewire_payload && (
-          <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
-            <h4 className="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Send className="w-4 h-4" /> Guidewire ClaimCenter Webhook Payload
-            </h4>
-            <pre className="text-[11px] font-mono text-purple-200/80 bg-slate-950 p-3 rounded-lg overflow-x-auto max-h-48 border border-slate-800/80">
-              {JSON.stringify(info.data.guidewire_payload, null, 2)}
-            </pre>
-          </div>
+          <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#111827' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1 }}>
+              <SendIcon sx={{ fontSize: 16, color: 'info.main' }} />
+              <Typography variant="overline" sx={{ color: 'info.main' }}>Guidewire ClaimCenter Payload</Typography>
+            </Box>
+            <Box sx={{ p: 1.5, bgcolor: '#0B1120', borderRadius: 2, border: '1px solid #1E293B', maxHeight: 200, overflow: 'auto' }}>
+              <pre style={{ margin: 0, fontSize: '0.68rem', fontFamily: 'monospace', color: '#C4B5FD', whiteSpace: 'pre-wrap' }}>
+                {JSON.stringify(info.data.guidewire_payload, null, 2)}
+              </pre>
+            </Box>
+          </Paper>
         )}
 
-        {/* Formatted JSON Output */}
-        <div>
-          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-            Detailed Data Inspector
-          </h4>
-          <pre className="text-[11px] font-mono bg-slate-950 p-4 rounded-xl border border-slate-800 text-cyan-300 overflow-x-auto leading-relaxed">
+        {/* Full JSON Data */}
+        <Divider sx={{ my: 2 }} />
+        <Typography variant="overline" sx={{ color: 'text.disabled', mb: 1, display: 'block' }}>Structured Output (JSON)</Typography>
+        <Box sx={{ p: 2, bgcolor: '#0B1120', borderRadius: 2, border: '1px solid #1E293B', maxHeight: 400, overflow: 'auto' }}>
+          <pre style={{ margin: 0, fontSize: '0.68rem', fontFamily: 'monospace', color: '#22D3EE', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
             {JSON.stringify(info.data, null, 2)}
           </pre>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Drawer>
   );
 };

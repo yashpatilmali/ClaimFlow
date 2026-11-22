@@ -1,75 +1,81 @@
 import React, { useState } from 'react';
-import { 
-  Users, 
-  AlertTriangle, 
-  CheckCircle2, 
-  XCircle, 
-  FileText, 
-  Send, 
-  ShieldAlert, 
-  RefreshCcw, 
-  BookOpen, 
-  DollarSign, 
-  Edit3,
-  Sparkles
-} from 'lucide-react';
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup,
+  Alert,
+  AlertTitle,
+  Divider,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import { HITLQueueItem } from '../types/claim';
 
 interface HITLQueueTableProps {
   queue: HITLQueueItem[];
-  onSubmitDecision: (
-    claimNumber: string,
-    decision: string,
-    auditNote: string,
-    overrideAmount?: number
-  ) => Promise<void>;
+  onSubmitDecision: (claimNumber: string, decision: string, auditNote: string, overrideAmount?: number) => Promise<void>;
   isLoading: boolean;
 }
 
-export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
-  queue,
-  onSubmitDecision,
-  isLoading
-}) => {
+const PRESET_NOTES: Record<string, string> = {
+  APPROVE: 'Reviewed mechanic estimate and coverage terms. Approved settlement payout per policy terms.',
+  DENY: 'Confirmed policy exclusion under Section 3.B. Denial affirmed after reviewing cited clauses.',
+  REFER_SIU: 'Referred to Special Investigation Unit (SIU) due to high fraud probability score and narrative/invoice mismatch.',
+  OVERRIDE_PAYOUT: 'Adjusted payout amount per senior adjuster re-inspection of damage.',
+};
+
+export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitDecision, isLoading }) => {
   const [selectedClaim, setSelectedClaim] = useState<HITLQueueItem | null>(null);
-  const [decision, setDecision] = useState<'APPROVE' | 'OVERRIDE_PAYOUT' | 'DENY' | 'REFER_SIU'>('APPROVE');
+  const [decision, setDecision] = useState<string>('APPROVE');
   const [auditNote, setAuditNote] = useState('');
   const [overrideAmount, setOverrideAmount] = useState<number | ''>('');
 
-  const handleOpenModal = (claim: HITLQueueItem) => {
+  const handleOpen = (claim: HITLQueueItem) => {
     setSelectedClaim(claim);
-    // Suggest intelligent default decision based on pause reason
+    // Smart default
     if (claim.pause_reasons?.some(r => r.toLowerCase().includes('exclusion') || r.toLowerCase().includes('racing'))) {
       setDecision('DENY');
-      setAuditNote('Confirmed policy exclusion under Section 3.B. Denial affirmed.');
+      setAuditNote(PRESET_NOTES['DENY']);
     } else if (claim.fraud_risk_score >= 60) {
       setDecision('REFER_SIU');
-      setAuditNote('Referred to Special Investigation Unit (SIU) due to high fraud probability and narrative mismatch.');
+      setAuditNote(PRESET_NOTES['REFER_SIU']);
     } else {
       setDecision('APPROVE');
-      setAuditNote('Reviewed claim details and approved settlement payout per policy terms.');
+      setAuditNote(PRESET_NOTES['APPROVE']);
     }
     setOverrideAmount(claim.calculated_net_payout);
   };
 
-  const handleApplyPresetNote = (type: string) => {
-    switch (type) {
-      case 'APPROVE':
-        setAuditNote('Reviewed mechanic estimate and coverage terms. Approved settlement payout.');
-        break;
-      case 'DENY':
-        setAuditNote('Confirmed policy exclusion under Section 3.B. Denial affirmed.');
-        break;
-      case 'REFER_SIU':
-        setAuditNote('Referred to SIU due to high fraud probability score and line-item mismatch.');
-        break;
-      case 'OVERRIDE_PAYOUT':
-        setAuditNote('Adjusted payout amount per senior adjuster damage inspection.');
-        break;
+  const handleDecisionChange = (_: any, newDec: string | null) => {
+    if (newDec) {
+      setDecision(newDec);
+      setAuditNote(PRESET_NOTES[newDec] || '');
     }
   };
 
-  const handleConfirmDecision = async () => {
+  const handleConfirm = async () => {
     if (!selectedClaim || !auditNote.trim()) return;
     await onSubmitDecision(
       selectedClaim.claim_number,
@@ -80,304 +86,214 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
     setSelectedClaim(null);
   };
 
-  return (
-    <div className="max-w-7xl mx-auto space-y-6 py-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
-            <Users className="w-6 h-6 text-amber-400" />
-            Human Review Queue (Adjuster Governance)
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Review claims paused by governance rules: policy exclusions, fraud score ≥ 30, payouts ≥ $2,000, or commercial subrogation.
-          </p>
-        </div>
-        <div className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold rounded-lg self-start sm:self-auto">
-          {queue.length} Claims Awaiting Action
-        </div>
-      </div>
+  const getFraudChipColor = (score: number): 'success' | 'warning' | 'error' => {
+    if (score >= 60) return 'error';
+    if (score >= 30) return 'warning';
+    return 'success';
+  };
 
-      {/* Queue Table */}
+  return (
+    <Box sx={{ maxWidth: 1280, mx: 'auto', py: 3 }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box>
+          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <GroupsIcon sx={{ color: 'warning.main' }} />
+            Human-in-the-Loop Adjuster Queue
+          </Typography>
+          <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
+            Review claims paused by governance rules: policy exclusions, fraud score ≥ 30, payouts ≥ $2,000, or commercial subrogation.
+          </Typography>
+        </Box>
+        <Chip label={`${queue.length} Pending`} color="warning" variant="outlined" sx={{ fontWeight: 700, mt: { xs: 1, sm: 0 } }} />
+      </Box>
+
+      {/* Table or Empty State */}
       {queue.length === 0 ? (
-        <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-12 text-center">
-          <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-white">All Caught Up!</h3>
-          <p className="text-xs text-slate-400 mt-1">
-            No claims currently pending manual adjuster review. Claims eligible for STP were auto-adjudicated.
-          </p>
-          <p className="text-[11px] text-slate-500 mt-2">
-            To test this queue, run <strong>Scenario 2 (Street Racing)</strong> or <strong>Scenario 3 (Inflated Claim)</strong> from the Test Lab tab!
-          </p>
-        </div>
+        <Paper sx={{ p: 6, textAlign: 'center' }}>
+          <CheckCircleIcon sx={{ fontSize: 56, color: 'success.main', mb: 2 }} />
+          <Typography variant="h6">All Caught Up</Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+            No claims pending manual review. Run Scenario 2 (Racing) or 3 (Fraud) from the Test Lab to generate queue items.
+          </Typography>
+        </Paper>
       ) : (
-        <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-x-auto shadow-xl">
-          <table className="w-full text-left text-xs min-w-[700px]">
-            <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
-              <tr>
-                <th className="p-4">Claim #</th>
-                <th className="p-4">Policy</th>
-                <th className="p-4">Incident Date</th>
-                <th className="p-4">Claimed / Net</th>
-                <th className="p-4">Fraud Score</th>
-                <th className="p-4">Subrogation</th>
-                <th className="p-4">Reason for Review</th>
-                <th className="p-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/80">
+        <TableContainer component={Paper} sx={{ bgcolor: '#111827' }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Claim #</TableCell>
+                <TableCell>Policy</TableCell>
+                <TableCell>Incident</TableCell>
+                <TableCell align="right">Claimed / Net</TableCell>
+                <TableCell align="center">Fraud</TableCell>
+                <TableCell align="center">Subrogation</TableCell>
+                <TableCell>Reason</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {queue.map((item) => (
-                <tr key={item.claim_number} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="p-4 font-mono font-bold text-cyan-400">{item.claim_number}</td>
-                  <td className="p-4 font-mono text-slate-300">{item.policy_number}</td>
-                  <td className="p-4 text-slate-300">{item.incident_date}</td>
-                  <td className="p-4 font-mono">
-                    <div className="text-slate-400 line-through">${item.claimed_amount?.toLocaleString()}</div>
-                    <div className="text-emerald-400 font-bold">${item.calculated_net_payout?.toLocaleString()}</div>
-                  </td>
-                  <td className="p-4">
-                    <span
-                      className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                        item.fraud_risk_score >= 60
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                          : item.fraud_risk_score >= 30
-                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                          : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      }`}
-                    >
-                      {item.fraud_risk_score}/100
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <span
-                      className={`px-2 py-0.5 rounded-full font-semibold text-[10px] ${
-                        item.subrogation_likelihood === 'HIGH'
-                          ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 font-bold'
-                          : 'bg-slate-800 text-slate-400'
-                      }`}
-                    >
-                      {item.subrogation_likelihood}
-                    </span>
-                  </td>
-                  <td className="p-4 max-w-xs truncate text-amber-300/90 text-[11px]" title={item.pause_reasons?.join(' | ')}>
-                    {item.pause_reasons?.[0] || 'Manual governance rule triggered'}
-                  </td>
-                  <td className="p-4 text-right">
-                    <button
-                      onClick={() => handleOpenModal(item)}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md shadow-blue-600/20"
-                    >
-                      Review Claim
-                    </button>
-                  </td>
-                </tr>
+                <TableRow key={item.claim_number} hover sx={{ '&:hover': { bgcolor: 'rgba(37,99,235,0.04)' } }}>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 700, color: 'secondary.main', fontSize: '0.78rem' }}>
+                    {item.claim_number}
+                  </TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace', fontSize: '0.78rem' }}>{item.policy_number}</TableCell>
+                  <TableCell sx={{ fontSize: '0.78rem' }}>{item.incident_date}</TableCell>
+                  <TableCell align="right">
+                    <Typography sx={{ fontSize: '0.72rem', color: 'text.disabled', textDecoration: 'line-through' }}>
+                      ${item.claimed_amount?.toLocaleString()}
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.82rem', fontWeight: 700, color: 'success.main', fontFamily: 'monospace' }}>
+                      ${item.calculated_net_payout?.toLocaleString()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip label={`${item.fraud_risk_score}/100`} size="small" color={getFraudChipColor(item.fraud_risk_score)} variant="outlined" sx={{ fontSize: '0.65rem', fontWeight: 700 }} />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={item.subrogation_likelihood}
+                      size="small"
+                      variant={item.subrogation_likelihood === 'HIGH' ? 'filled' : 'outlined'}
+                      color={item.subrogation_likelihood === 'HIGH' ? 'info' : 'default'}
+                      sx={{ fontSize: '0.65rem', fontWeight: 600 }}
+                    />
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 200, fontSize: '0.72rem', color: 'warning.light' }}>
+                    <Tooltip title={item.pause_reasons?.join(' | ') || ''}>
+                      <Typography noWrap sx={{ fontSize: 'inherit', color: 'inherit' }}>
+                        {item.pause_reasons?.[0] || 'Governance rule triggered'}
+                      </Typography>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button variant="contained" size="small" onClick={() => handleOpen(item)} sx={{ fontSize: '0.72rem' }}>
+                      Review
+                    </Button>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
 
-      {/* Adjuster Decision Modal */}
-      {selectedClaim && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-150">
-            {/* Modal Header */}
-            <div className="p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-white text-lg">Adjuster Governance Review</span>
-                  <span className="font-mono text-xs text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">
-                    {selectedClaim.claim_number}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400 mt-1">
-                  Policy: {selectedClaim.policy_number} &nbsp;|&nbsp; Loss Date: {selectedClaim.incident_date}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedClaim(null)}
-                className="text-slate-400 hover:text-white transition-colors text-lg"
-              >
-                ✕
-              </button>
-            </div>
+      {/* Decision Dialog */}
+      <Dialog open={!!selectedClaim} onClose={() => setSelectedClaim(null)} maxWidth="md" fullWidth>
+        {selectedClaim && (
+          <>
+            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="h6" sx={{ fontSize: '1.05rem' }}>Adjuster Governance Review</Typography>
+                  <Chip label={selectedClaim.claim_number} size="small" color="secondary" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: '0.68rem' }} />
+                </Box>
+                <Typography variant="caption">
+                  Policy: {selectedClaim.policy_number} · Loss Date: {selectedClaim.incident_date}
+                </Typography>
+              </Box>
+              <IconButton onClick={() => setSelectedClaim(null)} size="small"><CloseIcon /></IconButton>
+            </DialogTitle>
 
-            {/* Modal Body */}
-            <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto text-xs">
-              {/* Financial Breakdown */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Claimed Total</span>
-                  <div className="font-bold text-slate-200 mt-0.5">${selectedClaim.claimed_amount?.toLocaleString()}</div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Disallowed</span>
-                  <div className="font-bold text-rose-400 mt-0.5">-${selectedClaim.disallowed_amount?.toLocaleString()}</div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Deductible</span>
-                  <div className="font-bold text-slate-400 mt-0.5">-${selectedClaim.deductible?.toLocaleString()}</div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Net Payout</span>
-                  <div className="font-bold text-emerald-400 mt-0.5 text-sm">${selectedClaim.calculated_net_payout?.toLocaleString()}</div>
-                </div>
-              </div>
+            <DialogContent dividers sx={{ bgcolor: '#111827' }}>
+              {/* Financial Summary */}
+              <Grid container spacing={2} sx={{ mb: 2.5 }}>
+                {[
+                  { label: 'Claimed', value: `$${selectedClaim.claimed_amount?.toLocaleString()}`, color: 'text.primary' },
+                  { label: 'Disallowed', value: `-$${selectedClaim.disallowed_amount?.toLocaleString()}`, color: 'error.main' },
+                  { label: 'Deductible', value: `-$${selectedClaim.deductible?.toLocaleString()}`, color: 'text.secondary' },
+                  { label: 'Net Payout', value: `$${selectedClaim.calculated_net_payout?.toLocaleString()}`, color: 'success.main' },
+                ].map((m) => (
+                  <Grid size={{ xs: 6, sm: 3 }} key={m.label}>
+                    <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: '#0B1120' }}>
+                      <Typography variant="overline">{m.label}</Typography>
+                      <Typography sx={{ fontWeight: 800, fontFamily: 'monospace', color: m.color, fontSize: '1rem' }}>{m.value}</Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
 
               {/* Pause Reasons */}
-              <div className="bg-amber-950/30 border border-amber-900/50 rounded-xl p-3">
-                <h4 className="font-bold text-amber-400 text-xs flex items-center gap-1.5 mb-1.5">
-                  <AlertTriangle className="w-4 h-4" /> Why this claim paused for human review:
-                </h4>
-                <ul className="list-disc list-inside space-y-1 text-slate-300">
+              <Alert severity="warning" icon={<WarningAmberIcon />} sx={{ mb: 2 }}>
+                <AlertTitle sx={{ fontSize: '0.82rem' }}>Why This Claim Was Paused</AlertTitle>
+                <ul style={{ margin: 0, paddingLeft: 18 }}>
                   {selectedClaim.pause_reasons.map((r, i) => (
-                    <li key={i}>{r}</li>
+                    <li key={i}><Typography variant="body2" sx={{ fontSize: '0.78rem' }}>{r}</Typography></li>
                   ))}
                 </ul>
-              </div>
+              </Alert>
 
-              {/* Citations Preview if any */}
-              {selectedClaim.citations && selectedClaim.citations.length > 0 && (
-                <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                  <h4 className="font-bold text-emerald-400 text-xs flex items-center gap-1.5 mb-1.5">
-                    <BookOpen className="w-4 h-4" /> Cited Policy Clauses
-                  </h4>
+              {/* Citations */}
+              {selectedClaim.citations?.length > 0 && (
+                <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#0B1120' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1 }}>
+                    <MenuBookIcon sx={{ fontSize: 16, color: 'success.main' }} />
+                    <Typography variant="overline" sx={{ color: 'success.main' }}>Policy Citations</Typography>
+                  </Box>
                   {selectedClaim.citations.map((c, i) => (
-                    <div key={i} className="text-slate-300 italic border-l-2 border-emerald-500 pl-2">
-                      <strong className="not-italic text-slate-200">{c.section_ref}:</strong> "{c.quote}"
-                    </div>
+                    <Box key={i} sx={{ pl: 1.5, mb: 1, borderLeft: '3px solid #10B981' }}>
+                      <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: '#E2E8F0' }}>{c.section_ref}</Typography>
+                      <Typography sx={{ fontSize: '0.72rem', fontStyle: 'italic', color: '#94A3B8' }}>"{c.quote}"</Typography>
+                    </Box>
                   ))}
-                </div>
+                </Paper>
               )}
 
-              {/* Action Selector */}
-              <div>
-                <label className="block font-semibold text-slate-200 mb-2">Adjuster Action</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDecision('APPROVE');
-                      handleApplyPresetNote('APPROVE');
-                    }}
-                    className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
-                      decision === 'APPROVE'
-                        ? 'bg-emerald-600 text-white shadow-md'
-                        : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
-                    }`}
-                  >
-                    APPROVE (${selectedClaim.calculated_net_payout?.toLocaleString()})
-                  </button>
+              <Divider sx={{ my: 2 }} />
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDecision('OVERRIDE_PAYOUT');
-                      handleApplyPresetNote('OVERRIDE_PAYOUT');
-                    }}
-                    className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
-                      decision === 'OVERRIDE_PAYOUT'
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
-                    }`}
-                  >
-                    OVERRIDE PAYOUT
-                  </button>
+              {/* Decision Selector */}
+              <Typography variant="subtitle2" sx={{ mb: 1, color: 'text.primary' }}>Adjuster Decision</Typography>
+              <ToggleButtonGroup value={decision} exclusive onChange={handleDecisionChange} fullWidth size="small" sx={{ mb: 2 }}>
+                <ToggleButton value="APPROVE" sx={{ fontSize: '0.72rem', fontWeight: 700 }} color="success">
+                  Approve (${selectedClaim.calculated_net_payout?.toLocaleString()})
+                </ToggleButton>
+                <ToggleButton value="OVERRIDE_PAYOUT" sx={{ fontSize: '0.72rem', fontWeight: 700 }} color="primary">
+                  Override Payout
+                </ToggleButton>
+                <ToggleButton value="DENY" sx={{ fontSize: '0.72rem', fontWeight: 700 }} color="warning">
+                  Deny Claim
+                </ToggleButton>
+                <ToggleButton value="REFER_SIU" sx={{ fontSize: '0.72rem', fontWeight: 700 }} color="error">
+                  Refer to SIU
+                </ToggleButton>
+              </ToggleButtonGroup>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDecision('DENY');
-                      handleApplyPresetNote('DENY');
-                    }}
-                    className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
-                      decision === 'DENY'
-                        ? 'bg-amber-600 text-white shadow-md'
-                        : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
-                    }`}
-                  >
-                    CONFIRM DENIAL
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDecision('REFER_SIU');
-                      handleApplyPresetNote('REFER_SIU');
-                    }}
-                    className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
-                      decision === 'REFER_SIU'
-                        ? 'bg-rose-600 text-white shadow-md'
-                        : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
-                    }`}
-                  >
-                    REFER TO SIU
-                  </button>
-                </div>
-              </div>
-
-              {/* Override Amount Input */}
               {decision === 'OVERRIDE_PAYOUT' && (
-                <div>
-                  <label className="block font-semibold text-slate-300 mb-1">
-                    Override Settlement Payout ($)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={overrideAmount}
-                    onChange={(e) => setOverrideAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 font-mono"
-                    placeholder="Enter revised dollar amount"
-                  />
-                </div>
+                <TextField
+                  fullWidth size="small" label="Override Payout Amount ($)" type="number"
+                  value={overrideAmount} onChange={(e) => setOverrideAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
+                  slotProps={{
+                    input: { sx: { fontFamily: 'monospace' } },
+                  }}
+                  sx={{ mb: 2 }}
+                />
               )}
 
-              {/* Mandatory Audit Note */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block font-semibold text-slate-200">
-                    Adjuster Justification Note (Required)
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => handleApplyPresetNote(decision)}
-                    className="text-[11px] text-cyan-400 hover:underline flex items-center gap-1"
-                  >
-                    <Sparkles className="w-3 h-3" /> Auto-fill Sample Note
-                  </button>
-                </div>
-                <textarea
-                  rows={3}
-                  value={auditNote}
-                  onChange={(e) => setAuditNote(e.target.value)}
-                  placeholder="Record formal adjudication rationale..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200 focus:outline-none focus:border-blue-500"
-                />
-              </div>
-            </div>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>Justification Note (Required)</Typography>
+                <Button size="small" startIcon={<AutoFixHighIcon sx={{ fontSize: 14 }} />} onClick={() => setAuditNote(PRESET_NOTES[decision] || '')} sx={{ fontSize: '0.65rem' }}>
+                  Auto-fill
+                </Button>
+              </Box>
+              <TextField
+                fullWidth multiline rows={3} value={auditNote} onChange={(e) => setAuditNote(e.target.value)}
+                placeholder="Record formal adjudication rationale…"
+                slotProps={{
+                  input: { sx: { fontSize: '0.82rem' } },
+                }}
+              />
+            </DialogContent>
 
-            {/* Modal Footer */}
-            <div className="p-4 bg-slate-950 border-t border-slate-800 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setSelectedClaim(null)}
-                className="px-4 py-2 rounded-lg text-slate-400 hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                disabled={isLoading || !auditNote.trim()}
-                onClick={handleConfirmDecision}
-                className="px-6 py-2 rounded-lg font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-all disabled:opacity-50"
-              >
-                {isLoading ? "Resuming Graph..." : "Sign-Off & Resume Workflow"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+            <DialogActions sx={{ px: 3, py: 2, bgcolor: '#0F172A' }}>
+              <Button onClick={() => setSelectedClaim(null)} sx={{ color: 'text.secondary' }}>Cancel</Button>
+              <Button variant="contained" onClick={handleConfirm} disabled={isLoading || !auditNote.trim()} sx={{ px: 3 }}>
+                {isLoading ? 'Resuming…' : 'Sign-Off & Resume Workflow'}
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
+    </Box>
   );
 };
