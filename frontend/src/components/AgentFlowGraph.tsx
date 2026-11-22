@@ -113,65 +113,65 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({ agentStatus, age
     {
       id: 'intake', type: 'customAgent', position: { x: 380, y: 30 },
       data: {
-        label: '1. Intake Agent', role: 'FNOL & Invoice Parser',
+        label: 'Intake', role: 'FNOL & Invoices',
         status: agentStatus['intake_agent'] || 'idle',
         latencyMs: agentOutputs['intake'] ? 580 : undefined,
-        metrics: agentOutputs['intake'] ? `Claimed: $${agentOutputs['intake'].claimed_amount?.toLocaleString()}` : undefined,
+        metrics: agentOutputs['intake'] ? `$${agentOutputs['intake'].claimed_amount?.toLocaleString()}` : undefined,
         icon: FindInPageIcon, accentColor: '#2563EB',
         onClick: () => onSelectNode('intake_agent'),
       },
     },
     {
-      id: 'policy', type: 'customAgent', position: { x: 60, y: 200 },
+      id: 'policy', type: 'customAgent', position: { x: 60, y: 190 },
       data: {
-        label: '2. Policy Agent', role: 'RAG Coverage Validator',
+        label: 'Policy', role: 'Coverage & Rules',
         status: agentStatus['policy_agent'] || 'idle',
         latencyMs: agentOutputs['policy'] ? 720 : undefined,
-        metrics: agentOutputs['policy'] ? (agentOutputs['policy'].is_covered ? 'Coverage: ACTIVE' : 'Coverage: EXCLUDED') : undefined,
+        metrics: agentOutputs['policy'] ? (agentOutputs['policy'].is_covered ? 'Covered' : 'Excluded') : undefined,
         icon: VerifiedUserIcon, accentColor: '#059669',
         onClick: () => onSelectNode('policy_agent'),
       },
     },
     {
-      id: 'fraud', type: 'customAgent', position: { x: 380, y: 200 },
+      id: 'fraud', type: 'customAgent', position: { x: 380, y: 190 },
       data: {
-        label: '3. Fraud Agent', role: 'ML + Rules Classifier',
+        label: 'Fraud', role: 'Risk Scoring',
         status: agentStatus['fraud_agent'] || 'idle',
         latencyMs: agentOutputs['fraud'] ? 740 : undefined,
-        metrics: agentOutputs['fraud'] ? `Risk: ${agentOutputs['fraud'].fraud_risk_score}/100` : undefined,
+        metrics: agentOutputs['fraud'] ? `Score: ${agentOutputs['fraud'].fraud_risk_score}/100` : undefined,
         icon: ReportProblemIcon, accentColor: '#DC2626',
         onClick: () => onSelectNode('fraud_agent'),
       },
     },
     {
-      id: 'subrogation', type: 'customAgent', position: { x: 700, y: 200 },
+      id: 'subrogation', type: 'customAgent', position: { x: 700, y: 190 },
       data: {
-        label: '4. Subrogation Agent', role: 'Recovery Target Spotter',
+        label: 'Subrogation', role: 'Third-Party Fault',
         status: agentStatus['subrogation_agent'] || 'idle',
         latencyMs: agentOutputs['subrogation'] ? 690 : undefined,
-        metrics: agentOutputs['subrogation'] ? `Recovery: ${agentOutputs['subrogation'].subrogation_likelihood}` : undefined,
+        metrics: agentOutputs['subrogation'] ? `Fault: ${agentOutputs['subrogation'].subrogation_likelihood}` : undefined,
         icon: SyncAltIcon, accentColor: '#4F46E5',
         onClick: () => onSelectNode('subrogation_agent'),
       },
     },
     {
-      id: 'estimator', type: 'customAgent', position: { x: 380, y: 370 },
+      id: 'estimator', type: 'customAgent', position: { x: 380, y: 350 },
       data: {
-        label: '5. Estimator Agent', role: 'Deterministic Payout Math',
+        label: 'Estimator', role: 'Damage Math',
         status: agentStatus['estimator_agent'] || 'idle',
         latencyMs: agentOutputs['estimator'] ? 480 : undefined,
-        metrics: agentOutputs['estimator'] ? `Net Payout: $${agentOutputs['estimator'].net_payout?.toLocaleString()}` : undefined,
+        metrics: agentOutputs['estimator'] ? `Payout: $${agentOutputs['estimator'].net_payout?.toLocaleString()}` : undefined,
         icon: CalculateIcon, accentColor: '#D97706',
         onClick: () => onSelectNode('estimator_agent'),
       },
     },
     {
-      id: 'adjudicator', type: 'customAgent', position: { x: 380, y: 540 },
+      id: 'adjudicator', type: 'customAgent', position: { x: 380, y: 510 },
       data: {
-        label: '6. Decision Agent', role: 'Governance & HITL Router',
+        label: 'Decision', role: 'Final Settlement',
         status: agentStatus['adjudicator_agent'] || 'idle',
         latencyMs: agentOutputs['adjudication'] ? 380 : undefined,
-        metrics: agentOutputs['adjudication'] ? `Status: ${agentOutputs['adjudication'].status}` : undefined,
+        metrics: agentOutputs['adjudication'] ? `${agentOutputs['adjudication'].status}` : undefined,
         icon: GavelIcon, accentColor: '#7C3AED',
         onClick: () => onSelectNode('adjudicator_agent'),
       },
@@ -192,32 +192,10 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({ agentStatus, age
   }, [agentStatus]);
 
   return (
-    <Paper sx={{ width: '100%', height: 680, overflow: 'hidden', position: 'relative', bgcolor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-      {/* Legend */}
-      <Box sx={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, bgcolor: 'rgba(255,255,255,0.95)', border: '1px solid #E2E8F0', borderRadius: 2.5, px: 2, py: 1, backdropFilter: 'blur(8px)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-        <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color: '#0F172A', mr: 0.5 }}>Execution Flow:</Typography>
-        {[
-          { label: 'Intake', color: '#0284C7' },
-          { label: 'Parallel Checks', color: '#059669' },
-          { label: 'Payout Math', color: '#D97706' },
-          { label: 'Decision', color: '#7C3AED' },
-        ].map((l, i) => (
-          <Box key={l.label} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            {i > 0 && <Typography sx={{ fontSize: '0.65rem', color: '#94A3B8' }}>→</Typography>}
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: l.color }} />
-            <Typography sx={{ fontSize: '0.65rem', color: '#475569', fontWeight: 600 }}>{l.label}</Typography>
-          </Box>
-        ))}
-      </Box>
-
-      {/* Tip */}
-      <Box sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 10, display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.5, bgcolor: 'rgba(255,255,255,0.92)', border: '1px solid #E2E8F0', borderRadius: 1.5, px: 1.5, py: 0.8, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-        <Typography sx={{ fontSize: '0.65rem', color: '#64748B' }}>💡 Click any agent node to inspect its data, citations, or formulas.</Typography>
-      </Box>
-
+    <Paper sx={{ width: '100%', height: 640, overflow: 'hidden', position: 'relative', bgcolor: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 2 }}>
       <ReactFlow
         nodes={nodes} edges={edges} nodeTypes={nodeTypes}
-        fitView fitViewOptions={{ padding: 0.18 }}
+        fitView fitViewOptions={{ padding: 0.15 }}
         proOptions={{ hideAttribution: true }}
       >
         <Background color="#CBD5E1" gap={20} size={1} />

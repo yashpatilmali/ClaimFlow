@@ -99,10 +99,10 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
         <Box>
           <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <GroupsIcon sx={{ color: 'warning.main' }} />
-            Human-in-the-Loop Adjuster Queue
+            Review Queue
           </Typography>
           <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
-            Review claims paused by governance rules: policy exclusions, fraud score ≥ 30, payouts ≥ $2,000, or commercial subrogation.
+            Claims requiring manual adjuster review and sign-off.
           </Typography>
         </Box>
         <Chip label={`${queue.length} Pending`} color="warning" variant="outlined" sx={{ fontWeight: 700, mt: { xs: 1, sm: 0 } }} />
@@ -112,9 +112,9 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
       {queue.length === 0 ? (
         <Paper sx={{ p: 6, textAlign: 'center' }}>
           <CheckCircleIcon sx={{ fontSize: 56, color: 'success.main', mb: 2 }} />
-          <Typography variant="h6">All Caught Up</Typography>
+          <Typography variant="h6">No Pending Claims</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-            No claims pending manual review. Run Scenario 2 (Racing) or 3 (Fraud) from the Test Lab to generate queue items.
+            All claims are processed. Run a flagged test claim to view it here.
           </Typography>
         </Paper>
       ) : (
@@ -186,7 +186,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1, bgcolor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant="h6" sx={{ fontSize: '1.05rem', color: '#0F172A' }}>Adjuster Governance Review</Typography>
+                  <Typography variant="h6" sx={{ fontSize: '1.05rem', color: '#0F172A' }}>Review Claim</Typography>
                   <Chip label={selectedClaim.claim_number} size="small" color="primary" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: '0.68rem', fontWeight: 700 }} />
                 </Box>
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>

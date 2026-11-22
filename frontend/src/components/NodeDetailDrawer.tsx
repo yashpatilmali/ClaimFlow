@@ -28,19 +28,19 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ selectedNode
   const getAgentData = () => {
     switch (selectedNodeId) {
       case 'intake_agent':
-        return { title: '1. Intake Agent', description: 'Reads mechanic invoice and claimant narrative, masks PII (SSN, phone, email), and verifies invoice line-item math.', data: agentOutputs['intake'] || { status: 'Awaiting execution' } };
+        return { title: '1. Intake', description: 'Extracts invoice line items, masks PII, and verifies arithmetic.', data: agentOutputs['intake'] || { status: 'Awaiting execution' } };
       case 'policy_agent':
-        return { title: '2. Policy Agent (RAG)', description: 'Validates active policy dates, searches policy clauses for coverage and exclusions, and returns verbatim citations.', data: agentOutputs['policy'] || { status: 'Awaiting execution' } };
+        return { title: '2. Policy RAG', description: 'Verifies coverage dates, limits, and deductible against policy documents.', data: agentOutputs['policy'] || { status: 'Awaiting execution' } };
       case 'fraud_agent':
-        return { title: '3. Fraud Agent (ML)', description: 'Uses machine learning and business rules to evaluate risk factors and computes a 0–100 fraud probability score.', data: agentOutputs['fraud'] || { status: 'Awaiting execution' } };
+        return { title: '3. Fraud Detection', description: 'Evaluates risk score (0–100) using ML model and rule checks.', data: agentOutputs['fraud'] || { status: 'Awaiting execution' } };
       case 'subrogation_agent':
-        return { title: '4. Subrogation Agent', description: 'Identifies at-fault third parties from police citations and narrative cues, and drafts a recovery referral brief.', data: agentOutputs['subrogation'] || { status: 'Awaiting execution' } };
+        return { title: '4. Subrogation', description: 'Identifies third-party liability and recovery likelihood.', data: agentOutputs['subrogation'] || { status: 'Awaiting execution' } };
       case 'estimator_agent':
-        return { title: '5. Estimator Agent (Math)', description: 'Calculates exact payout using strict Python math: max(0, min(approved, limit) − deductible). No LLM arithmetic.', data: agentOutputs['estimator'] || { status: 'Awaiting execution' } };
+        return { title: '5. Estimator', description: 'Calculates approved payout: max(0, min(approved, limit) − deductible).', data: agentOutputs['estimator'] || { status: 'Awaiting execution' } };
       case 'adjudicator_agent':
-        return { title: '6. Decision Agent', description: 'Applies governance rules to auto-approve or pause the claim for human adjuster review in durable checkpoint state.', data: agentOutputs['adjudication'] || { status: 'Awaiting execution' } };
+        return { title: '6. Decision', description: 'Determines auto-approval or routes to review queue.', data: agentOutputs['adjudication'] || { status: 'Awaiting execution' } };
       default:
-        return { title: 'Agent Inspector', description: 'Select an agent node to inspect.', data: {} };
+        return { title: 'Agent Details', description: 'Select an agent to inspect details.', data: {} };
     }
   };
 

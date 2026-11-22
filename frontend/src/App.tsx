@@ -194,10 +194,10 @@ export const App: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Box>
                 <Box component="h2" sx={{ m: 0, fontSize: '1.15rem', fontWeight: 700, color: 'text.primary' }}>
-                  AI Agent Execution Pipeline
+                  Workflow
                 </Box>
                 <Box component="p" sx={{ m: 0, mt: 0.3, fontSize: '0.75rem', color: 'text.secondary' }}>
-                  {currentClaimNumber ? `Processing: ${currentClaimNumber}` : 'Click any agent node to inspect extracted data, citations, or formulas.'}
+                  {currentClaimNumber ? `Claim: ${currentClaimNumber}` : 'Select an agent to inspect details.'}
                 </Box>
               </Box>
             </Box>

@@ -36,10 +36,10 @@ interface KPIDashboardProps {
 }
 
 const KPI_CARDS = [
-  { key: 'stp_rate_percentage', label: 'STP Adjudication Rate', suffix: '%', delta: '+6.7% MoM', deltaColor: '#10B981', sub: 'Target: 45% | Zero-touch auto-settlement', icon: BoltIcon, iconColor: '#10B981', iconBg: 'rgba(16,185,129,0.1)' },
-  { key: 'avg_triage_latency_seconds', label: 'Avg Triage Latency', suffix: 's', delta: 'vs 4.2 days manual', deltaColor: '#06B6D4', sub: '6 agents in parallel fan-out', icon: AccessTimeIcon, iconColor: '#3B82F6', iconBg: 'rgba(59,130,246,0.1)' },
-  { key: 'fraud_leakage_prevented_dollars', label: 'Fraud Leakage Prevented', prefix: '$', delta: null, deltaColor: '', sub: 'Hybrid ML + benchmark disallowances', icon: ShieldIcon, iconColor: '#EF4444', iconBg: 'rgba(239,68,68,0.1)' },
-  { key: 'subrogation_opportunities_dollars', label: 'Subrogation Opportunities', prefix: '$', delta: null, deltaColor: '', sub: 'Commercial & adverse 3rd-party tracking', icon: AccountBalanceIcon, iconColor: '#6366F1', iconBg: 'rgba(99,102,241,0.1)' },
+  { key: 'stp_rate_percentage', label: 'STP Rate', suffix: '%', delta: '+6.7% MoM', deltaColor: '#10B981', sub: 'Auto-settled claims', icon: BoltIcon, iconColor: '#10B981', iconBg: 'rgba(16,185,129,0.1)' },
+  { key: 'avg_triage_latency_seconds', label: 'Avg Triage Time', suffix: 's', delta: 'vs 4.2d manual', deltaColor: '#06B6D4', sub: 'Multi-agent processing', icon: AccessTimeIcon, iconColor: '#3B82F6', iconBg: 'rgba(59,130,246,0.1)' },
+  { key: 'fraud_leakage_prevented_dollars', label: 'Fraud Prevented', prefix: '$', delta: null, deltaColor: '', sub: 'High-risk claim savings', icon: ShieldIcon, iconColor: '#EF4444', iconBg: 'rgba(239,68,68,0.1)' },
+  { key: 'subrogation_opportunities_dollars', label: 'Subrogation Value', prefix: '$', delta: null, deltaColor: '', sub: 'Third-party recovery', icon: AccountBalanceIcon, iconColor: '#6366F1', iconBg: 'rgba(99,102,241,0.1)' },
 ];
 
 export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
@@ -71,10 +71,10 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
       <Box sx={{ mb: 3 }}>
         <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <TrendingUpIcon sx={{ color: 'primary.main' }} />
-          Claims Operations Dashboard
+          Analytics
         </Typography>
         <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
-          Real-time metrics: settlement efficiency, fraud mitigation, and subrogation recovery.
+          Real-time settlement rates, triage speed, and financial impact.
         </Typography>
       </Box>
 
@@ -117,10 +117,10 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
         <Grid size={{ xs: 12, lg: 8 }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 0.5, fontSize: '0.9rem', color: '#0F172A' }}>
-              Weekly Claims Volume & STP Rate Trend
+              Claims Volume & STP Trend
             </Typography>
             <Typography variant="caption" sx={{ display: 'block', mb: 3 }}>
-              Scaling claim throughput alongside continuous improvement in automated settlement.
+              Weekly volume and auto-settlement percentage.
             </Typography>
             <Box sx={{ height: 300, width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
