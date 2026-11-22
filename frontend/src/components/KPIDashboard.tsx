@@ -63,14 +63,14 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
     { name: 'Subrogation', value: 15, color: '#6366F1' },
   ];
 
-  const tooltipStyle = { backgroundColor: '#0F172A', borderColor: '#334155', borderRadius: '8px', fontSize: '11px', color: '#E2E8F0' };
+  const tooltipStyle = { backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '11px', color: '#0F172A', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' };
 
   return (
     <Box sx={{ maxWidth: 1280, mx: 'auto', py: 3 }}>
       {/* Title */}
       <Box sx={{ mb: 3 }}>
         <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <TrendingUpIcon sx={{ color: 'secondary.main' }} />
+          <TrendingUpIcon sx={{ color: 'primary.main' }} />
           Claims Operations Dashboard
         </Typography>
         <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
@@ -88,7 +88,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
 
           return (
             <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={card.key}>
-              <Paper sx={{ p: 2.5, position: 'relative', overflow: 'hidden', transition: 'border-color 0.2s', '&:hover': { borderColor: '#334155' } }}>
+              <Paper sx={{ p: 2.5, position: 'relative', overflow: 'hidden', transition: 'border-color 0.2s', '&:hover': { borderColor: '#93C5FD' } }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography variant="overline" sx={{ color: 'text.secondary' }}>{card.label}</Typography>
                   <Box sx={{ width: 34, height: 34, borderRadius: 2, bgcolor: card.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -96,7 +96,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
                   </Box>
                 </Box>
                 <Box sx={{ mt: 1.5, display: 'flex', alignItems: 'baseline', gap: 1 }}>
-                  <Typography sx={{ fontSize: '1.85rem', fontWeight: 800, color: '#F1F5F9', letterSpacing: '-0.02em' }}>{val}</Typography>
+                  <Typography sx={{ fontSize: '1.85rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.02em' }}>{val}</Typography>
                   {card.delta && (
                     <Typography sx={{ fontSize: '0.68rem', fontWeight: 600, color: card.deltaColor }}>{card.delta}</Typography>
                   )}
@@ -104,7 +104,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
                     <Chip label={`${summary.subrogation_claims_count} claims`} size="small" variant="outlined" color="info" sx={{ fontSize: '0.6rem', height: 20, ml: 0.5 }} />
                   )}
                 </Box>
-                <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'text.disabled' }}>{card.sub}</Typography>
+                <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'text.secondary' }}>{card.sub}</Typography>
               </Paper>
             </Grid>
           );
@@ -116,7 +116,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
         {/* Trend Chart */}
         <Grid size={{ xs: 12, lg: 8 }}>
           <Paper sx={{ p: 3 }}>
-            <Typography variant="subtitle1" sx={{ mb: 0.5, fontSize: '0.9rem' }}>
+            <Typography variant="subtitle1" sx={{ mb: 0.5, fontSize: '0.9rem', color: '#0F172A' }}>
               Weekly Claims Volume & STP Rate Trend
             </Typography>
             <Typography variant="caption" sx={{ display: 'block', mb: 3 }}>
@@ -125,14 +125,14 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
             <Box sx={{ height: 300, width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
                   <XAxis dataKey="period" stroke="#64748B" fontSize={11} />
                   <YAxis yAxisId="left" stroke="#64748B" fontSize={11} />
-                  <YAxis yAxisId="right" orientation="right" stroke="#38bdf8" fontSize={11} domain={[0, 100]} />
+                  <YAxis yAxisId="right" orientation="right" stroke="#0284C7" fontSize={11} domain={[0, 100]} />
                   <ReTooltip contentStyle={tooltipStyle} />
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                  <Bar yAxisId="left" dataKey="claims" fill="#3B82F6" name="Claims Volume" radius={[4, 4, 0, 0]} />
-                  <Line yAxisId="right" type="monotone" dataKey="stp_rate" stroke="#06B6D4" strokeWidth={3} name="STP Rate (%)" dot={{ r: 4, fill: '#06B6D4' }} />
+                  <Bar yAxisId="left" dataKey="claims" fill="#2563EB" name="Claims Volume" radius={[4, 4, 0, 0]} />
+                  <Line yAxisId="right" type="monotone" dataKey="stp_rate" stroke="#0284C7" strokeWidth={3} name="STP Rate (%)" dot={{ r: 4, fill: '#0284C7' }} />
                 </ComposedChart>
               </ResponsiveContainer>
             </Box>
@@ -143,7 +143,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
         <Grid size={{ xs: 12, lg: 4 }}>
           <Paper sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <Box>
-              <Typography variant="subtitle1" sx={{ mb: 0.5, fontSize: '0.9rem' }}>Adjudication Disposition</Typography>
+              <Typography variant="subtitle1" sx={{ mb: 0.5, fontSize: '0.9rem', color: '#0F172A' }}>Adjudication Disposition</Typography>
               <Typography variant="caption" sx={{ display: 'block', mb: 2 }}>
                 Breakdown by outcome channel.
               </Typography>
@@ -160,12 +160,12 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {
                 </ResponsiveContainer>
               </Box>
             </Box>
-            <Grid container spacing={1} sx={{ pt: 2, borderTop: '1px solid #1E293B' }}>
+            <Grid container spacing={1} sx={{ pt: 2, borderTop: '1px solid #F1F5F9' }}>
               {distData.map((d: any, i: number) => (
                 <Grid size={6} key={i}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                     <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: d.color, flexShrink: 0 }} />
-                    <Typography variant="caption" sx={{ color: '#CBD5E1' }}>{d.name}</Typography>
+                    <Typography variant="caption" sx={{ color: '#475569', fontWeight: 500 }}>{d.name}</Typography>
                   </Box>
                 </Grid>
               ))}

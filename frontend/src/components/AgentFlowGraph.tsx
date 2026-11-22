@@ -35,11 +35,11 @@ interface AgentNodeProps {
 }
 
 const statusConfig: Record<string, { label: string; color: string; borderColor: string; icon: any }> = {
-  idle: { label: 'Waiting', color: '#475569', borderColor: '#1E293B', icon: null },
-  running: { label: 'Analyzing…', color: '#06B6D4', borderColor: '#06B6D4', icon: null },
-  completed: { label: 'Done', color: '#10B981', borderColor: '#10B981', icon: CheckCircleIcon },
-  paused: { label: 'Needs Review', color: '#F59E0B', borderColor: '#F59E0B', icon: PauseCircleIcon },
-  error: { label: 'Error', color: '#EF4444', borderColor: '#EF4444', icon: ErrorIcon },
+  idle: { label: 'Waiting', color: '#64748B', borderColor: '#E2E8F0', icon: null },
+  running: { label: 'Analyzing…', color: '#0284C7', borderColor: '#0284C7', icon: null },
+  completed: { label: 'Done', color: '#059669', borderColor: '#10B981', icon: CheckCircleIcon },
+  paused: { label: 'Needs Review', color: '#D97706', borderColor: '#F59E0B', icon: PauseCircleIcon },
+  error: { label: 'Error', color: '#DC2626', borderColor: '#EF4444', icon: ErrorIcon },
 };
 
 const CustomAgentNode: React.FC<AgentNodeProps> = ({ data }) => {
@@ -51,51 +51,51 @@ const CustomAgentNode: React.FC<AgentNodeProps> = ({ data }) => {
     <Box
       onClick={data.onClick}
       sx={{
-        bgcolor: '#0F172A',
-        borderRadius: 3,
+        bgcolor: '#FFFFFF',
+        borderRadius: 2.5,
         p: 2,
         width: 260,
         border: `1.5px solid ${sc.borderColor}`,
-        boxShadow: isRunning ? `0 0 20px ${sc.color}30` : (data.status === 'completed' ? `0 0 12px ${sc.color}20` : 'none'),
+        boxShadow: isRunning ? `0 0 20px rgba(2,132,199,0.25)` : (data.status === 'completed' ? `0 2px 10px rgba(5,150,105,0.15)` : '0 2px 8px rgba(0,0,0,0.05)'),
         cursor: 'pointer',
-        transition: 'all 0.3s',
+        transition: 'all 0.25s ease-in-out',
         animation: isRunning ? 'pulse 2s ease-in-out infinite' : undefined,
-        '@keyframes pulse': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.85 } },
-        '&:hover': { borderColor: '#3B82F6', boxShadow: '0 4px 16px rgba(37,99,235,0.15)' },
+        '@keyframes pulse': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.88 } },
+        '&:hover': { borderColor: '#1D4ED8', boxShadow: '0 8px 24px rgba(29,78,216,0.12)' },
       }}
     >
-      <Handle type="target" position={Position.Top} style={{ background: '#475569', width: 8, height: 8 }} />
+      <Handle type="target" position={Position.Top} style={{ background: '#94A3B8', width: 8, height: 8 }} />
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-        <Box sx={{ width: 32, height: 32, borderRadius: 2, bgcolor: data.accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ width: 34, height: 34, borderRadius: 2, bgcolor: data.accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }}>
           <Icon sx={{ fontSize: 18, color: '#fff' }} />
         </Box>
         <Box>
-          <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: '#F1F5F9', lineHeight: 1.2 }}>{data.label}</Typography>
-          <Typography sx={{ fontSize: '0.62rem', color: '#64748B', fontWeight: 500 }}>{data.role}</Typography>
+          <Typography sx={{ fontSize: '0.8rem', fontWeight: 700, color: '#0F172A', lineHeight: 1.2 }}>{data.label}</Typography>
+          <Typography sx={{ fontSize: '0.64rem', color: '#64748B', fontWeight: 500 }}>{data.role}</Typography>
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 1, borderTop: '1px solid #1E293B' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 1, borderTop: '1px solid #F1F5F9' }}>
         <Chip
           icon={isRunning ? <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: sc.color, animation: 'pulse 1s ease-in-out infinite' }} /> : (sc.icon ? <Box component={sc.icon} sx={{ fontSize: '14px !important', color: `${sc.color} !important` }} /> : undefined)}
           label={sc.label}
           size="small"
-          sx={{ height: 22, fontSize: '0.6rem', fontWeight: 700, bgcolor: `${sc.color}18`, color: sc.color, border: `1px solid ${sc.color}40` }}
+          sx={{ height: 22, fontSize: '0.62rem', fontWeight: 700, bgcolor: `${sc.color}15`, color: sc.color, border: `1px solid ${sc.color}35` }}
         />
         {data.latencyMs && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
-            <AccessTimeIcon sx={{ fontSize: 11, color: '#475569' }} />
-            <Typography sx={{ fontSize: '0.6rem', fontFamily: 'monospace', color: '#64748B' }}>{data.latencyMs}ms</Typography>
+            <AccessTimeIcon sx={{ fontSize: 11, color: '#64748B' }} />
+            <Typography sx={{ fontSize: '0.62rem', fontFamily: 'monospace', color: '#64748B', fontWeight: 600 }}>{data.latencyMs}ms</Typography>
           </Box>
         )}
       </Box>
 
       {data.metrics && (
-        <Box sx={{ mt: 1, px: 1, py: 0.5, bgcolor: '#0B1120', borderRadius: 1.5, border: '1px solid #1E293B' }}>
-          <Typography sx={{ fontSize: '0.6rem', fontFamily: 'monospace', color: '#22D3EE' }}>{data.metrics}</Typography>
+        <Box sx={{ mt: 1, px: 1.2, py: 0.5, bgcolor: '#F8FAFC', borderRadius: 1.5, border: '1px solid #E2E8F0' }}>
+          <Typography sx={{ fontSize: '0.62rem', fontFamily: 'monospace', color: '#0369A1', fontWeight: 600 }}>{data.metrics}</Typography>
         </Box>
       )}
-      <Handle type="source" position={Position.Bottom} style={{ background: '#475569', width: 8, height: 8 }} />
+      <Handle type="source" position={Position.Bottom} style={{ background: '#94A3B8', width: 8, height: 8 }} />
     </Box>
   );
 };
@@ -192,26 +192,26 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({ agentStatus, age
   }, [agentStatus]);
 
   return (
-    <Paper sx={{ width: '100%', height: 680, overflow: 'hidden', position: 'relative', bgcolor: '#0B1120' }}>
+    <Paper sx={{ width: '100%', height: 680, overflow: 'hidden', position: 'relative', bgcolor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
       {/* Legend */}
-      <Box sx={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, bgcolor: 'rgba(15,23,42,0.92)', border: '1px solid #1E293B', borderRadius: 2.5, px: 2, py: 1, backdropFilter: 'blur(8px)' }}>
-        <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color: '#F1F5F9', mr: 0.5 }}>Execution Flow:</Typography>
+      <Box sx={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, bgcolor: 'rgba(255,255,255,0.95)', border: '1px solid #E2E8F0', borderRadius: 2.5, px: 2, py: 1, backdropFilter: 'blur(8px)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+        <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color: '#0F172A', mr: 0.5 }}>Execution Flow:</Typography>
         {[
-          { label: 'Intake', color: '#38BDF8' },
-          { label: 'Parallel Checks', color: '#10B981' },
-          { label: 'Payout Math', color: '#F59E0B' },
-          { label: 'Decision', color: '#A855F7' },
+          { label: 'Intake', color: '#0284C7' },
+          { label: 'Parallel Checks', color: '#059669' },
+          { label: 'Payout Math', color: '#D97706' },
+          { label: 'Decision', color: '#7C3AED' },
         ].map((l, i) => (
           <Box key={l.label} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            {i > 0 && <Typography sx={{ fontSize: '0.65rem', color: '#475569' }}>→</Typography>}
+            {i > 0 && <Typography sx={{ fontSize: '0.65rem', color: '#94A3B8' }}>→</Typography>}
             <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: l.color }} />
-            <Typography sx={{ fontSize: '0.65rem', color: '#94A3B8' }}>{l.label}</Typography>
+            <Typography sx={{ fontSize: '0.65rem', color: '#475569', fontWeight: 600 }}>{l.label}</Typography>
           </Box>
         ))}
       </Box>
 
       {/* Tip */}
-      <Box sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 10, display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.5, bgcolor: 'rgba(15,23,42,0.85)', border: '1px solid #1E293B', borderRadius: 1.5, px: 1.5, py: 0.8 }}>
+      <Box sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 10, display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.5, bgcolor: 'rgba(255,255,255,0.92)', border: '1px solid #E2E8F0', borderRadius: 1.5, px: 1.5, py: 0.8, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
         <Typography sx={{ fontSize: '0.65rem', color: '#64748B' }}>💡 Click any agent node to inspect its data, citations, or formulas.</Typography>
       </Box>
 
@@ -220,8 +220,8 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({ agentStatus, age
         fitView fitViewOptions={{ padding: 0.18 }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#1E293B" gap={20} size={1} />
-        <Controls style={{ background: '#0F172A', border: '1px solid #1E293B', borderRadius: 8 }} />
+        <Background color="#CBD5E1" gap={20} size={1} />
+        <Controls style={{ background: '#FFFFFF', border: '1px solid #CBD5E1', borderRadius: 8 }} />
       </ReactFlow>
     </Paper>
   );

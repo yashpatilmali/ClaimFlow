@@ -150,8 +150,9 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
         sx={{
           p: { xs: 3, md: 4 },
           mb: 4,
-          background: 'linear-gradient(135deg, #0F172A 0%, #172554 50%, #0F172A 100%)',
-          borderColor: '#1E3A5F',
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #EFF6FF 60%, #F8FAFC 100%)',
+          borderColor: '#DBEAFE',
+          boxShadow: '0 4px 20px -2px rgba(29, 78, 216, 0.06)',
         }}
       >
         <Chip
@@ -159,29 +160,29 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
           label="VALUEMOMENTUM ENTERPRISE P&C ORCHESTRATOR"
           size="small"
           variant="outlined"
-          sx={{ mb: 2, borderColor: 'rgba(37,99,235,0.4)', color: 'primary.light', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.08em' }}
+          sx={{ mb: 2, borderColor: '#93C5FD', color: 'primary.dark', bgcolor: '#EFF6FF', fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.08em' }}
         />
-        <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', md: '1.85rem' }, color: '#F8FAFC' }}>
+        <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', md: '1.85rem' }, color: 'text.primary' }}>
           ClaimFlow AI — Intelligent Claims Adjudication
         </Typography>
-        <Typography variant="body2" sx={{ mt: 1.5, maxWidth: 700, lineHeight: 1.7, color: '#94A3B8' }}>
+        <Typography variant="body2" sx={{ mt: 1.5, maxWidth: 700, lineHeight: 1.7, color: 'text.secondary' }}>
           Process auto insurance claims in seconds. 6 specialized AI agents extract repair bills, validate policy coverage,
           detect fraud, compute exact payouts, and pause for human review when governance rules require it.
         </Typography>
 
         {/* 3-Step Flow */}
-        <Grid container spacing={2} sx={{ mt: 3, pt: 2, borderTop: '1px solid rgba(30,41,59,0.8)' }}>
+        <Grid container spacing={2} sx={{ mt: 3, pt: 2, borderTop: '1px solid #E2E8F0' }}>
           {[
-            { step: '1', label: 'Submit or select a claim', color: '#2563EB' },
-            { step: '2', label: 'Watch 6 AI agents run live', color: '#06B6D4' },
-            { step: '3', label: 'Instant settlement or review', color: '#10B981' },
+            { step: '1', label: 'Submit or select a claim', color: '#1D4ED8' },
+            { step: '2', label: 'Watch 6 AI agents run live', color: '#0284C7' },
+            { step: '3', label: 'Instant settlement or review', color: '#059669' },
           ].map((s) => (
             <Grid size={{ xs: 12, sm: 4 }} key={s.step}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, bgcolor: 'rgba(15,23,42,0.6)', px: 2, py: 1.5, borderRadius: 2, border: '1px solid #1E293B' }}>
-                <Box sx={{ width: 26, height: 26, borderRadius: '50%', bgcolor: `${s.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Typography sx={{ fontSize: '0.7rem', fontWeight: 800, color: s.color }}>{s.step}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, bgcolor: '#FFFFFF', px: 2, py: 1.5, borderRadius: 2, border: '1px solid #E2E8F0', boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}>
+                <Box sx={{ width: 26, height: 26, borderRadius: '50%', bgcolor: `${s.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Typography sx={{ fontSize: '0.72rem', fontWeight: 800, color: s.color }}>{s.step}</Typography>
                 </Box>
-                <Typography variant="body2" sx={{ fontSize: '0.78rem', color: '#CBD5E1' }}>
+                <Typography variant="body2" sx={{ fontSize: '0.78rem', color: '#1E293B' }}>
                   <strong>Step {s.step}:</strong> {s.label}
                 </Typography>
               </Box>
@@ -215,10 +216,10 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
 
       {/* Collapsible Test Materials Drawer */}
       <Collapse in={showMaterials}>
-        <Paper sx={{ p: 3, mb: 3, borderColor: 'rgba(37,99,235,0.3)' }}>
+        <Paper sx={{ p: 3, mb: 3, borderColor: '#BFDBFE', bgcolor: '#FFFFFF', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="subtitle1">Testing Materials & Reference Documents</Typography>
-            <Chip label="Ready to Use" size="small" color="primary" variant="outlined" sx={{ fontSize: '0.6rem' }} />
+            <Typography variant="subtitle1" sx={{ color: 'text.primary', fontWeight: 700 }}>Testing Materials & Reference Documents</Typography>
+            <Chip label="Ready to Use" size="small" color="primary" variant="outlined" sx={{ fontSize: '0.65rem' }} />
           </Box>
           <Grid container spacing={3}>
             {/* Sample Documents */}
@@ -236,14 +237,14 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
                     underline="none"
                     sx={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                      px: 2, py: 1, borderRadius: 1.5, bgcolor: 'background.default',
-                      '&:hover': { bgcolor: 'rgba(37,99,235,0.08)' },
-                      transition: 'background-color 0.2s',
+                      px: 2, py: 1, borderRadius: 1.5, bgcolor: '#F8FAFC', border: '1px solid #F1F5F9',
+                      '&:hover': { bgcolor: '#EFF6FF', borderColor: '#BFDBFE' },
+                      transition: 'all 0.2s',
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <DescriptionIcon sx={{ fontSize: 16, color: doc.color }} />
-                      <Typography variant="body2" sx={{ fontSize: '0.78rem', color: 'text.primary' }}>{doc.label}</Typography>
+                      <Typography variant="body2" sx={{ fontSize: '0.78rem', color: 'text.primary', fontWeight: 500 }}>{doc.label}</Typography>
                     </Box>
                     <OpenInNewIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
                   </Link>
@@ -257,9 +258,9 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
               </Typography>
               <Stack spacing={1}>
                 {TEST_PRESETS.slice(4).map((p) => (
-                  <Paper key={p.id} sx={{ p: 1.5, bgcolor: 'background.default' }}>
+                  <Paper key={p.id} sx={{ p: 1.5, bgcolor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700, fontSize: '0.78rem' }}>{p.name}</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 700, fontSize: '0.78rem', color: '#0F172A' }}>{p.name}</Typography>
                       <Box>
                         <Tooltip title={copiedId === p.id ? 'Copied!' : 'Copy Prompt'}>
                           <IconButton size="small" onClick={() => handleCopy(p.id, p.narrative)}>
@@ -271,14 +272,14 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
                         </Button>
                       </Box>
                     </Box>
-                    <Typography variant="caption" sx={{ fontFamily: 'monospace', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <Typography variant="caption" sx={{ fontFamily: 'monospace', color: '#475569', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {p.narrative}
                     </Typography>
                   </Paper>
                 ))}
               </Stack>
-              <Typography variant="caption" sx={{ display: 'block', mt: 1.5, color: 'text.disabled' }}>
-                Complete cheatsheet in <strong style={{ color: '#94A3B8' }}>TESTING_GUIDE.md</strong>
+              <Typography variant="caption" sx={{ display: 'block', mt: 1.5, color: 'text.secondary' }}>
+                Complete cheatsheet in <strong style={{ color: '#0F172A' }}>TESTING_GUIDE.md</strong>
               </Typography>
             </Grid>
           </Grid>
@@ -323,12 +324,12 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
                   {sc.narrative}
                 </Typography>
                 <Divider sx={{ my: 1.5 }} />
-                <Typography variant="caption" sx={{ display: 'block' }}>
-                  <strong style={{ color: '#CBD5E1' }}>Expected:</strong> {sc.expected_outcome}
+                <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+                  <strong style={{ color: '#0F172A' }}>Expected:</strong> {sc.expected_outcome}
                 </Typography>
-                <Typography variant="caption" sx={{ display: 'block', mt: 0.3 }}>
-                  <strong style={{ color: '#CBD5E1' }}>Policy:</strong>{' '}
-                  <span style={{ fontFamily: 'monospace' }}>{sc.policy_number}</span>
+                <Typography variant="caption" sx={{ display: 'block', mt: 0.3, color: 'text.secondary' }}>
+                  <strong style={{ color: '#0F172A' }}>Policy:</strong>{' '}
+                  <span style={{ fontFamily: 'monospace', color: '#1E40AF', fontWeight: 600 }}>{sc.policy_number}</span>
                 </Typography>
               </CardContent>
               <CardActions sx={{ px: 2, pb: 2, pt: 0, gap: 1 }}>
@@ -447,9 +448,9 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
                 htmlFor="file-upload-mui"
                 sx={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                  py: 3, border: '2px dashed', borderColor: selectedFile ? 'primary.main' : '#334155',
-                  cursor: 'pointer', bgcolor: 'background.default',
-                  '&:hover': { borderColor: 'primary.main', bgcolor: 'rgba(37,99,235,0.04)' },
+                  py: 3, border: '2px dashed', borderColor: selectedFile ? 'primary.main' : '#CBD5E1',
+                  cursor: 'pointer', bgcolor: '#F8FAFC',
+                  '&:hover': { borderColor: 'primary.main', bgcolor: '#EFF6FF' },
                   transition: 'all 0.2s',
                 }}
               >
@@ -458,10 +459,10 @@ export const ClaimSubmitModal: React.FC<ClaimSubmitProps> = ({ scenarios, onExec
                   onChange={(e: any) => setSelectedFile(e.target.files ? e.target.files[0] : null)}
                 />
                 <CloudUploadIcon sx={{ fontSize: 28, color: selectedFile ? 'primary.main' : 'text.disabled', mb: 0.5 }} />
-                <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.8rem' }}>
+                <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.8rem', color: '#1E293B' }}>
                   {selectedFile ? selectedFile.name : 'Click to upload mechanic invoice PDF'}
                 </Typography>
-                <Typography variant="caption">Accepts standard repair bills and estimates</Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>Accepts standard repair bills and estimates</Typography>
               </Paper>
             </Grid>
           </Grid>

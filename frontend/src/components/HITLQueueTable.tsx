@@ -118,7 +118,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
           </Typography>
         </Paper>
       ) : (
-        <TableContainer component={Paper} sx={{ bgcolor: '#111827' }}>
+        <TableContainer component={Paper} sx={{ bgcolor: '#FFFFFF', border: '1px solid #E2E8F0' }}>
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -134,8 +134,8 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
             </TableHead>
             <TableBody>
               {queue.map((item) => (
-                <TableRow key={item.claim_number} hover sx={{ '&:hover': { bgcolor: 'rgba(37,99,235,0.04)' } }}>
-                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 700, color: 'secondary.main', fontSize: '0.78rem' }}>
+                <TableRow key={item.claim_number} hover sx={{ '&:hover': { bgcolor: 'rgba(29,78,216,0.03)' } }}>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 700, color: 'primary.main', fontSize: '0.78rem' }}>
                     {item.claim_number}
                   </TableCell>
                   <TableCell sx={{ fontFamily: 'monospace', fontSize: '0.78rem' }}>{item.policy_number}</TableCell>
@@ -160,7 +160,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
                       sx={{ fontSize: '0.65rem', fontWeight: 600 }}
                     />
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 200, fontSize: '0.72rem', color: 'warning.light' }}>
+                  <TableCell sx={{ maxWidth: 200, fontSize: '0.72rem', color: 'warning.main', fontWeight: 500 }}>
                     <Tooltip title={item.pause_reasons?.join(' | ') || ''}>
                       <Typography noWrap sx={{ fontSize: 'inherit', color: 'inherit' }}>
                         {item.pause_reasons?.[0] || 'Governance rule triggered'}
@@ -183,20 +183,20 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
       <Dialog open={!!selectedClaim} onClose={() => setSelectedClaim(null)} maxWidth="md" fullWidth>
         {selectedClaim && (
           <>
-            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
+            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1, bgcolor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant="h6" sx={{ fontSize: '1.05rem' }}>Adjuster Governance Review</Typography>
-                  <Chip label={selectedClaim.claim_number} size="small" color="secondary" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: '0.68rem' }} />
+                  <Typography variant="h6" sx={{ fontSize: '1.05rem', color: '#0F172A' }}>Adjuster Governance Review</Typography>
+                  <Chip label={selectedClaim.claim_number} size="small" color="primary" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: '0.68rem', fontWeight: 700 }} />
                 </Box>
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   Policy: {selectedClaim.policy_number} · Loss Date: {selectedClaim.incident_date}
                 </Typography>
               </Box>
-              <IconButton onClick={() => setSelectedClaim(null)} size="small"><CloseIcon /></IconButton>
+              <IconButton onClick={() => setSelectedClaim(null)} size="small" sx={{ color: 'text.secondary' }}><CloseIcon /></IconButton>
             </DialogTitle>
 
-            <DialogContent dividers sx={{ bgcolor: '#111827' }}>
+            <DialogContent dividers sx={{ bgcolor: '#FFFFFF' }}>
               {/* Financial Summary */}
               <Grid container spacing={2} sx={{ mb: 2.5 }}>
                 {[
@@ -206,7 +206,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
                   { label: 'Net Payout', value: `$${selectedClaim.calculated_net_payout?.toLocaleString()}`, color: 'success.main' },
                 ].map((m) => (
                   <Grid size={{ xs: 6, sm: 3 }} key={m.label}>
-                    <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: '#0B1120' }}>
+                    <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
                       <Typography variant="overline">{m.label}</Typography>
                       <Typography sx={{ fontWeight: 800, fontFamily: 'monospace', color: m.color, fontSize: '1rem' }}>{m.value}</Typography>
                     </Paper>
@@ -226,15 +226,15 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
 
               {/* Citations */}
               {selectedClaim.citations?.length > 0 && (
-                <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#0B1120' }}>
+                <Paper sx={{ p: 2, mb: 2.5, bgcolor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1 }}>
                     <MenuBookIcon sx={{ fontSize: 16, color: 'success.main' }} />
-                    <Typography variant="overline" sx={{ color: 'success.main' }}>Policy Citations</Typography>
+                    <Typography variant="overline" sx={{ color: 'success.dark' }}>Policy Citations</Typography>
                   </Box>
                   {selectedClaim.citations.map((c, i) => (
-                    <Box key={i} sx={{ pl: 1.5, mb: 1, borderLeft: '3px solid #10B981' }}>
-                      <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: '#E2E8F0' }}>{c.section_ref}</Typography>
-                      <Typography sx={{ fontSize: '0.72rem', fontStyle: 'italic', color: '#94A3B8' }}>"{c.quote}"</Typography>
+                    <Box key={i} sx={{ pl: 1.5, mb: 1, borderLeft: '3px solid #059669' }}>
+                      <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A' }}>{c.section_ref}</Typography>
+                      <Typography sx={{ fontSize: '0.75rem', fontStyle: 'italic', color: '#475569' }}>"{c.quote}"</Typography>
                     </Box>
                   ))}
                 </Paper>
@@ -285,7 +285,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
               />
             </DialogContent>
 
-            <DialogActions sx={{ px: 3, py: 2, bgcolor: '#0F172A' }}>
+            <DialogActions sx={{ px: 3, py: 2, bgcolor: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
               <Button onClick={() => setSelectedClaim(null)} sx={{ color: 'text.secondary' }}>Cancel</Button>
               <Button variant="contained" onClick={handleConfirm} disabled={isLoading || !auditNote.trim()} sx={{ px: 3 }}>
                 {isLoading ? 'Resuming…' : 'Sign-Off & Resume Workflow'}

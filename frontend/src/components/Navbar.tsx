@@ -52,9 +52,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, pending
           </Box>
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="h6" sx={{ fontSize: '1.05rem', fontWeight: 800, color: '#F1F5F9', lineHeight: 1.2 }}>
+              <Typography variant="h6" sx={{ fontSize: '1.05rem', fontWeight: 800, color: 'text.primary', lineHeight: 1.2 }}>
                 ClaimFlow{' '}
-                <Box component="span" sx={{ color: 'secondary.main' }}>AI</Box>
+                <Box component="span" sx={{ color: 'primary.main' }}>AI</Box>
               </Typography>
               <Chip
                 label="VALUEMOMENTUM"
@@ -64,9 +64,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, pending
                   fontSize: '0.55rem',
                   fontWeight: 800,
                   letterSpacing: '0.08em',
-                  bgcolor: 'rgba(37,99,235,0.15)',
-                  color: 'primary.light',
-                  border: '1px solid rgba(37,99,235,0.3)',
+                  bgcolor: 'rgba(29,78,216,0.08)',
+                  color: 'primary.dark',
+                  border: '1px solid rgba(29,78,216,0.2)',
                 }}
               />
             </Box>
@@ -118,7 +118,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, pending
             variant="outlined"
             size="small"
             sx={{
-              borderColor: '#1E293B',
+              borderColor: '#E2E8F0',
+              bgcolor: '#F8FAFC',
               color: 'text.secondary',
               fontSize: '0.7rem',
               height: 28,
