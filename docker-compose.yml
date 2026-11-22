@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # Primary Application Backend & Embedded Frontend
+  app:
+    build: .
+    container_name: claimflow-app
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=ClaimFlow AI
+      - APP_ENV=production
+      - DEBUG=false
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/claimflow
+      - SYNC_DATABASE_URL=postgresql://postgres:postgres@db:5432/claimflow
+      - MOCK_LLM=true
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-flash}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - STP_MAX_NET_PAYOUT=2000.00
+      - STP_MAX_FRAUD_SCORE=30.00
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # PostgreSQL 16 with pgvector Extension
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: claimflow-pgvector
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: claimflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d claimflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:

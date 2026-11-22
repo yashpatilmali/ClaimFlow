@@ -1,0 +1,22 @@
+{
+  "features": [
+    "months_as_customer",
+    "policy_bind_to_incident_days",
+    "policy_deductible",
+    "total_claim_amount",
+    "vehicle_claim_amount",
+    "incident_hour",
+    "number_of_vehicles_involved",
+    "witnesses",
+    "police_report_available",
+    "part_mismatch_flag",
+    "high_labor_ratio_flag",
+    "racing_exclusion_flag"
+  ],
+  "test_roc_auc": 0.8643,
+  "test_precision": 0.5652,
+  "test_recall": 0.3824,
+  "training_samples": 800,
+  "test_samples": 200,
+  "algorithm": "HistGradientBoostingClassifier"
+}
