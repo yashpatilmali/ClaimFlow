@@ -61,10 +61,6 @@ app.include_router(hitl_router)
 app.include_router(dashboard_router)
 app.include_router(scenarios_router)
 
-# Mount frontend production build if available
-if os.path.exists("frontend/dist"):
-    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
-
 
 @app.get("/health")
 def health_check():
@@ -77,6 +73,11 @@ def health_check():
         ),
         "checkpointer": "SQLite Durable Checkpointer"
     }
+
+
+# Mount frontend production build if available (must be mounted last to avoid catching API routes)
+if os.path.exists("frontend/dist"):
+    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
 
 
 if __name__ == "__main__":
