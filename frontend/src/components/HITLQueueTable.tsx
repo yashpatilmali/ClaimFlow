@@ -10,7 +10,8 @@ import {
   RefreshCcw, 
   BookOpen, 
   DollarSign, 
-  Edit3 
+  Edit3,
+  Sparkles
 } from 'lucide-react';
 import { HITLQueueItem } from '../types/claim';
 
@@ -37,9 +38,35 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
 
   const handleOpenModal = (claim: HITLQueueItem) => {
     setSelectedClaim(claim);
-    setDecision('APPROVE');
-    setAuditNote('');
+    // Suggest intelligent default decision based on pause reason
+    if (claim.pause_reasons?.some(r => r.toLowerCase().includes('exclusion') || r.toLowerCase().includes('racing'))) {
+      setDecision('DENY');
+      setAuditNote('Confirmed policy exclusion under Section 3.B. Denial affirmed.');
+    } else if (claim.fraud_risk_score >= 60) {
+      setDecision('REFER_SIU');
+      setAuditNote('Referred to Special Investigation Unit (SIU) due to high fraud probability and narrative mismatch.');
+    } else {
+      setDecision('APPROVE');
+      setAuditNote('Reviewed claim details and approved settlement payout per policy terms.');
+    }
     setOverrideAmount(claim.calculated_net_payout);
+  };
+
+  const handleApplyPresetNote = (type: string) => {
+    switch (type) {
+      case 'APPROVE':
+        setAuditNote('Reviewed mechanic estimate and coverage terms. Approved settlement payout.');
+        break;
+      case 'DENY':
+        setAuditNote('Confirmed policy exclusion under Section 3.B. Denial affirmed.');
+        break;
+      case 'REFER_SIU':
+        setAuditNote('Referred to SIU due to high fraud probability score and line-item mismatch.');
+        break;
+      case 'OVERRIDE_PAYOUT':
+        setAuditNote('Adjusted payout amount per senior adjuster damage inspection.');
+        break;
+    }
   };
 
   const handleConfirmDecision = async () => {
@@ -56,17 +83,17 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
   return (
     <div className="max-w-7xl mx-auto space-y-6 py-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
             <Users className="w-6 h-6 text-amber-400" />
-            Human-in-the-Loop (HITL) Adjuster Queue
+            Human Review Queue (Adjuster Governance)
           </h2>
           <p className="text-xs text-slate-400 mt-1">
-            Review claims paused by governance rules (policy exclusions, fraud score ≥ 30, payouts ≥ $2,000, or commercial subrogation).
+            Review claims paused by governance rules: policy exclusions, fraud score ≥ 30, payouts ≥ $2,000, or commercial subrogation.
           </p>
         </div>
-        <div className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold rounded-lg">
+        <div className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold rounded-lg self-start sm:self-auto">
           {queue.length} Claims Awaiting Action
         </div>
       </div>
@@ -79,19 +106,22 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
           <p className="text-xs text-slate-400 mt-1">
             No claims currently pending manual adjuster review. Claims eligible for STP were auto-adjudicated.
           </p>
+          <p className="text-[11px] text-slate-500 mt-2">
+            To test this queue, run <strong>Scenario 2 (Street Racing)</strong> or <strong>Scenario 3 (Inflated Claim)</strong> from the Test Lab tab!
+          </p>
         </div>
       ) : (
-        <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
-          <table className="w-full text-left text-xs">
+        <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-x-auto shadow-xl">
+          <table className="w-full text-left text-xs min-w-[700px]">
             <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
               <tr>
                 <th className="p-4">Claim #</th>
                 <th className="p-4">Policy</th>
                 <th className="p-4">Incident Date</th>
-                <th className="p-4">Claimed / Net Payout</th>
-                <th className="p-4">Fraud Risk</th>
+                <th className="p-4">Claimed / Net</th>
+                <th className="p-4">Fraud Score</th>
                 <th className="p-4">Subrogation</th>
-                <th className="p-4">Pause Reason</th>
+                <th className="p-4">Reason for Review</th>
                 <th className="p-4 text-right">Action</th>
               </tr>
             </thead>
@@ -137,7 +167,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
                       onClick={() => handleOpenModal(item)}
                       className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md shadow-blue-600/20"
                     >
-                      Review & Decide
+                      Review Claim
                     </button>
                   </td>
                 </tr>
@@ -166,7 +196,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
               </div>
               <button
                 onClick={() => setSelectedClaim(null)}
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-slate-400 hover:text-white transition-colors text-lg"
               >
                 ✕
               </button>
@@ -175,13 +205,13 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
             {/* Modal Body */}
             <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto text-xs">
               {/* Financial Breakdown */}
-              <div className="grid grid-cols-4 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase font-semibold">Claimed Total</span>
                   <div className="font-bold text-slate-200 mt-0.5">${selectedClaim.claimed_amount?.toLocaleString()}</div>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Benchmark Disallowed</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Disallowed</span>
                   <div className="font-bold text-rose-400 mt-0.5">-${selectedClaim.disallowed_amount?.toLocaleString()}</div>
                 </div>
                 <div>
@@ -189,7 +219,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
                   <div className="font-bold text-slate-400 mt-0.5">-${selectedClaim.deductible?.toLocaleString()}</div>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Calculated Net Payout</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold">Net Payout</span>
                   <div className="font-bold text-emerald-400 mt-0.5 text-sm">${selectedClaim.calculated_net_payout?.toLocaleString()}</div>
                 </div>
               </div>
@@ -197,7 +227,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
               {/* Pause Reasons */}
               <div className="bg-amber-950/30 border border-amber-900/50 rounded-xl p-3">
                 <h4 className="font-bold text-amber-400 text-xs flex items-center gap-1.5 mb-1.5">
-                  <AlertTriangle className="w-4 h-4" /> Triggered Exceptions Requiring Human Review
+                  <AlertTriangle className="w-4 h-4" /> Why this claim paused for human review:
                 </h4>
                 <ul className="list-disc list-inside space-y-1 text-slate-300">
                   {selectedClaim.pause_reasons.map((r, i) => (
@@ -210,7 +240,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
               {selectedClaim.citations && selectedClaim.citations.length > 0 && (
                 <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                   <h4 className="font-bold text-emerald-400 text-xs flex items-center gap-1.5 mb-1.5">
-                    <BookOpen className="w-4 h-4" /> Cited Policy Clauses (RAG)
+                    <BookOpen className="w-4 h-4" /> Cited Policy Clauses
                   </h4>
                   {selectedClaim.citations.map((c, i) => (
                     <div key={i} className="text-slate-300 italic border-l-2 border-emerald-500 pl-2">
@@ -223,10 +253,13 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
               {/* Action Selector */}
               <div>
                 <label className="block font-semibold text-slate-200 mb-2">Adjuster Action</label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
                     type="button"
-                    onClick={() => setDecision('APPROVE')}
+                    onClick={() => {
+                      setDecision('APPROVE');
+                      handleApplyPresetNote('APPROVE');
+                    }}
                     className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
                       decision === 'APPROVE'
                         ? 'bg-emerald-600 text-white shadow-md'
@@ -238,7 +271,10 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
 
                   <button
                     type="button"
-                    onClick={() => setDecision('OVERRIDE_PAYOUT')}
+                    onClick={() => {
+                      setDecision('OVERRIDE_PAYOUT');
+                      handleApplyPresetNote('OVERRIDE_PAYOUT');
+                    }}
                     className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
                       decision === 'OVERRIDE_PAYOUT'
                         ? 'bg-blue-600 text-white shadow-md'
@@ -250,7 +286,10 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
 
                   <button
                     type="button"
-                    onClick={() => setDecision('DENY')}
+                    onClick={() => {
+                      setDecision('DENY');
+                      handleApplyPresetNote('DENY');
+                    }}
                     className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
                       decision === 'DENY'
                         ? 'bg-amber-600 text-white shadow-md'
@@ -262,7 +301,10 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
 
                   <button
                     type="button"
-                    onClick={() => setDecision('REFER_SIU')}
+                    onClick={() => {
+                      setDecision('REFER_SIU');
+                      handleApplyPresetNote('REFER_SIU');
+                    }}
                     className={`py-2 px-3 rounded-lg font-semibold text-center transition-all ${
                       decision === 'REFER_SIU'
                         ? 'bg-rose-600 text-white shadow-md'
@@ -293,14 +335,23 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({
 
               {/* Mandatory Audit Note */}
               <div>
-                <label className="block font-semibold text-slate-200 mb-1">
-                  Adjuster Audit Justification Note (Mandatory)
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block font-semibold text-slate-200">
+                    Adjuster Justification Note (Required)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => handleApplyPresetNote(decision)}
+                    className="text-[11px] text-cyan-400 hover:underline flex items-center gap-1"
+                  >
+                    <Sparkles className="w-3 h-3" /> Auto-fill Sample Note
+                  </button>
+                </div>
                 <textarea
                   rows={3}
                   value={auditNote}
                   onChange={(e) => setAuditNote(e.target.value)}
-                  placeholder="Record formal adjudication rationale for audit trail and Guidewire ClaimCenter synchronization..."
+                  placeholder="Record formal adjudication rationale..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200 focus:outline-none focus:border-blue-500"
                 />
               </div>

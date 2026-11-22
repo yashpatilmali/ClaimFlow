@@ -18,44 +18,44 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
     switch (selectedNodeId) {
       case 'intake_agent':
         return {
-          title: 'Agent 1: Intake Agent (FNOL & IDP Reader)',
-          description: 'Parses repair invoices & narratives with pre-execution PII redaction and self-check line-item math reconciliation.',
+          title: '1. Intake Agent',
+          description: 'Reads mechanic invoice and claimant narrative, masks sensitive private info (SSN, phone, email), and verifies invoice math.',
           data: agentOutputs['intake'] || { status: 'Awaiting execution' },
         };
       case 'policy_agent':
         return {
-          title: 'Agent 2: Policy Coverage Validator (Parallel RAG)',
-          description: 'Validates active coverage dates, searches policy clauses for exclusions (racing, rideshare), and returns verbatim citations.',
+          title: '2. Policy Agent (RAG)',
+          description: 'Checks policy terms to confirm if the damage is covered, verifies active dates, and cites exact policy sections.',
           data: agentOutputs['policy'] || { status: 'Awaiting execution' },
         };
       case 'fraud_agent':
         return {
-          title: 'Agent 3: Fraud Agent (Hybrid ML + SQL Red-Flags)',
-          description: 'Evaluates loss-to-binding proximity, narrative vs invoice discrepancy, and predicts a 0–100 risk score via Scikit-Learn/XGBoost.',
+          title: '3. Fraud Agent (ML)',
+          description: 'Uses machine learning and business rules to evaluate suspicious factors (close bound date, mismatched parts) and computes a 0-100 score.',
           data: agentOutputs['fraud'] || { status: 'Awaiting execution' },
         };
       case 'subrogation_agent':
         return {
-          title: 'Agent 4: Subrogation Agent (Recovery Spotter)',
-          description: 'Analyzes third-party liability cues (police citations, rear-end impacts) and drafts preliminary subrogation referral packets.',
+          title: '4. Subrogation Agent',
+          description: 'Identifies if another driver or company caused the crash, and drafts a recovery letter to claim money back from their insurance.',
           data: agentOutputs['subrogation'] || { status: 'Awaiting execution' },
         };
       case 'estimator_agent':
         return {
-          title: 'Agent 5: Estimator Agent (Deterministic Payout Math)',
-          description: 'Caps inflated part & labor rates against industry benchmarks and strictly executes pure Python math formula (zero LLM math).',
+          title: '5. Estimator Agent (Math)',
+          description: 'Calculates the exact payout using strict Python math: Approved Total minus Deductible. The AI model never guesses numbers.',
           data: agentOutputs['estimator'] || { status: 'Awaiting execution' },
         };
       case 'adjudicator_agent':
         return {
-          title: 'Agent 6: Adjudicator Agent (Supervisor & HITL Router)',
-          description: 'Applies STP threshold rules (<$2k, risk <30) or triggers LangGraph interrupt() to pause for adjuster sign-off in checkpointer.',
+          title: '6. Decision Agent',
+          description: 'Determines whether to auto-approve straight through, or pause and send to a human adjuster for review.',
           data: agentOutputs['adjudication'] || { status: 'Awaiting execution' },
         };
       default:
         return {
           title: 'Agent Inspector',
-          description: 'Select a node in the graph to view outputs.',
+          description: 'Select an agent box in the diagram to inspect its results.',
           data: {},
         };
     }
@@ -72,7 +72,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
             <Code2 className="w-5 h-5 text-cyan-400" />
             {info.title}
           </h3>
-          <p className="text-xs text-slate-400 mt-1">{info.description}</p>
+          <p className="text-xs text-slate-400 mt-1 leading-relaxed">{info.description}</p>
         </div>
         <button
           onClick={onClose}
@@ -88,7 +88,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
         {selectedNodeId === 'policy_agent' && info.data.citations && (
           <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
             <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4" /> Verbatim Policy Citations (RAG)
+              <BookOpen className="w-4 h-4" /> Cited Policy Rules
             </h4>
             <div className="space-y-2">
               {info.data.citations.map((c: any, i: number) => (
@@ -106,7 +106,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
         {selectedNodeId === 'fraud_agent' && info.data.risk_drivers && (
           <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
             <h4 className="text-xs font-bold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <ShieldAlert className="w-4 h-4" /> Detected Risk Drivers & Rules
+              <ShieldAlert className="w-4 h-4" /> Detected Risk Factors
             </h4>
             <ul className="text-xs space-y-1.5 text-slate-300">
               {info.data.risk_drivers.map((d: string, i: number) => (
@@ -122,7 +122,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
         {selectedNodeId === 'estimator_agent' && info.data.formula_log && (
           <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
             <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Calculator className="w-4 h-4" /> Pure Python Deterministic Math Audit
+              <Calculator className="w-4 h-4" /> Exact Deterministic Math Formula
             </h4>
             <p className="text-xs font-mono text-amber-300/90 bg-slate-950 p-3 rounded-lg border border-slate-800/80">
               {info.data.formula_log}
@@ -144,7 +144,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
         {/* Formatted JSON Output */}
         <div>
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-            Structured Pydantic Node Output
+            Detailed Data Inspector
           </h4>
           <pre className="text-[11px] font-mono bg-slate-950 p-4 rounded-xl border border-slate-800 text-cyan-300 overflow-x-auto leading-relaxed">
             {JSON.stringify(info.data, null, 2)}

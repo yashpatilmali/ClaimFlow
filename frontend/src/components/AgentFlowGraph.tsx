@@ -66,14 +66,14 @@ const CustomAgentNode: React.FC<AgentNodeProps> = ({ data }) => {
         return (
           <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800">
             <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            Complete
+            Done
           </span>
         );
       case 'paused':
         return (
           <span className="flex items-center gap-1 text-[10px] text-amber-400 font-semibold bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-800">
             <PauseCircle className="w-3 h-3 text-amber-400" />
-            HITL Interrupted
+            Needs Review
           </span>
         );
       case 'error':
@@ -86,7 +86,7 @@ const CustomAgentNode: React.FC<AgentNodeProps> = ({ data }) => {
       default:
         return (
           <span className="text-[10px] text-slate-500 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800">
-            Idle
+            Waiting
           </span>
         );
     }
@@ -152,7 +152,7 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         position: { x: 380, y: 30 },
         data: {
           label: '1. Intake Agent',
-          role: 'FNOL & IDP Invoice Reader',
+          role: 'Reads Bill & Removes PII',
           status: agentStatus['intake_agent'] || 'idle',
           latencyMs: agentOutputs['intake'] ? 580 : undefined,
           metrics: agentOutputs['intake'] ? `Claimed: $${agentOutputs['intake'].claimed_amount?.toLocaleString()}` : undefined,
@@ -168,10 +168,10 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         position: { x: 60, y: 190 },
         data: {
           label: '2. Policy Agent',
-          role: 'Hybrid RAG Coverage Validator',
+          role: 'Verifies Policy Rules (RAG)',
           status: agentStatus['policy_agent'] || 'idle',
           latencyMs: agentOutputs['policy'] ? 720 : undefined,
-          metrics: agentOutputs['policy'] ? (agentOutputs['policy'].is_covered ? 'Covered: Active' : 'Excluded: Section 3') : undefined,
+          metrics: agentOutputs['policy'] ? (agentOutputs['policy'].is_covered ? 'Covered: Yes' : 'Covered: No (Excluded)') : undefined,
           icon: ShieldCheck,
           accentColor: 'bg-emerald-600',
           onClick: () => onSelectNode('policy_agent'),
@@ -183,7 +183,7 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         position: { x: 380, y: 190 },
         data: {
           label: '3. Fraud Agent',
-          role: 'Hybrid ML & SQL Red-Flags',
+          role: 'Calculates Fraud Risk (ML)',
           status: agentStatus['fraud_agent'] || 'idle',
           latencyMs: agentOutputs['fraud'] ? 740 : undefined,
           metrics: agentOutputs['fraud'] ? `Risk Score: ${agentOutputs['fraud'].fraud_risk_score}/100` : undefined,
@@ -198,10 +198,10 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         position: { x: 700, y: 190 },
         data: {
           label: '4. Subrogation Agent',
-          role: 'Recovery Target Spotter',
+          role: 'Spots At-Fault 3rd Parties',
           status: agentStatus['subrogation_agent'] || 'idle',
           latencyMs: agentOutputs['subrogation'] ? 690 : undefined,
-          metrics: agentOutputs['subrogation'] ? `Subro Likelihood: ${agentOutputs['subrogation'].subrogation_likelihood}` : undefined,
+          metrics: agentOutputs['subrogation'] ? `Recovery: ${agentOutputs['subrogation'].subrogation_likelihood}` : undefined,
           icon: RefreshCcw,
           accentColor: 'bg-indigo-600',
           onClick: () => onSelectNode('subrogation_agent'),
@@ -214,7 +214,7 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         position: { x: 380, y: 350 },
         data: {
           label: '5. Estimator Agent',
-          role: 'Deterministic Math & Benchmarks',
+          role: 'Exact Deterministic Math',
           status: agentStatus['estimator_agent'] || 'idle',
           latencyMs: agentOutputs['estimator'] ? 480 : undefined,
           metrics: agentOutputs['estimator'] ? `Net Payout: $${agentOutputs['estimator'].net_payout?.toLocaleString()}` : undefined,
@@ -229,11 +229,11 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         type: 'customAgent',
         position: { x: 380, y: 510 },
         data: {
-          label: '6. Adjudicator Agent',
-          role: 'Governance & HITL Router',
+          label: '6. Decision Agent',
+          role: 'Auto-Approve or Human Review',
           status: agentStatus['adjudicator_agent'] || 'idle',
           latencyMs: agentOutputs['adjudication'] ? 380 : undefined,
-          metrics: agentOutputs['adjudication'] ? `Status: ${agentOutputs['adjudication'].status}` : undefined,
+          metrics: agentOutputs['adjudication'] ? `Decision: ${agentOutputs['adjudication'].status}` : undefined,
           icon: Scale,
           accentColor: 'bg-purple-600',
           onClick: () => onSelectNode('adjudicator_agent'),
@@ -309,14 +309,22 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
   }, [agentStatus]);
 
   return (
-    <div className="w-full h-[680px] bg-slate-950/90 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden relative">
-      <div className="absolute top-4 left-4 z-10 flex items-center gap-3 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-xl backdrop-blur-md">
-        <span className="text-xs font-semibold text-slate-300">Live Agent Pipeline:</span>
-        <div className="flex items-center gap-2 text-[11px] text-slate-400">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-cyan-400" /> Parallel Fan-Out</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" /> Deterministic Fan-In</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400" /> HITL Router</span>
+    <div className="w-full h-[660px] bg-slate-950/95 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden relative">
+      <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2 sm:gap-3 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-xl backdrop-blur-md">
+        <span className="text-xs font-bold text-white">Execution Flow:</span>
+        <div className="flex items-center gap-2 text-[11px] text-slate-300">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-cyan-400" /> 1. Intake</span>
+          <span>➔</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400" /> 2. Parallel Checks</span>
+          <span>➔</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" /> 3. Payout Math</span>
+          <span>➔</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400" /> 4. Decision</span>
         </div>
+      </div>
+
+      <div className="absolute bottom-4 left-4 z-10 hidden sm:flex items-center gap-2 bg-slate-900/80 border border-slate-800/80 px-3 py-1.5 rounded-lg text-xs text-slate-400">
+        <span>💡 <strong>Tip:</strong> Click any agent box to inspect extracted data, citations, or formulas.</span>
       </div>
 
       <ReactFlow
@@ -324,7 +332,7 @@ export const AgentFlowGraph: React.FC<AgentFlowGraphProps> = ({
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
+        fitViewOptions={{ padding: 0.18 }}
         proOptions={{ hideAttribution: true }}
       >
         <Background color="#1e293b" gap={20} size={1} />

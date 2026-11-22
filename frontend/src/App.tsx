@@ -275,15 +275,21 @@ export const App: React.FC = () => {
 
         {activeTab === 'graph' && (
           <div className="max-w-7xl mx-auto space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h2 className="text-xl font-bold text-white">
-                  Multi-Agent Execution Topology
+                  AI Agents Live Execution Flow
                 </h2>
                 <p className="text-xs text-slate-400">
-                  {currentClaimNumber ? `Claim: ${currentClaimNumber}` : 'Interactive 6-agent LangGraph workflow. Click any node to inspect telemetry.'}
+                  {currentClaimNumber ? `Processing Claim: ${currentClaimNumber}` : 'Interactive 6-agent workflow. Click any agent box to inspect its outputs.'}
                 </p>
               </div>
+              <button
+                onClick={() => setActiveTab('submit')}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 self-start sm:self-auto"
+              >
+                ← Back to Test Lab
+              </button>
             </div>
 
             <AgentFlowGraph
