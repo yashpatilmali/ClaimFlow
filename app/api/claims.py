@@ -390,6 +390,59 @@ async def get_claim_details(claim_number: str, db: AsyncSession = Depends(get_db
     guidewire = json.loads(claim.guidewire_payload_json or "{}")
     audit_items = json.loads(claim.itemized_audit_json or "[]")
 
+    # Structured governance decision_rules
+    is_covered = trace.get("policy", {}).get("is_covered", True)
+    fraud_score = float(claim.fraud_risk_score or 0.0)
+    net_payout = float(claim.net_payout or 0.0)
+    subro = claim.subrogation_likelihood or "LOW"
+
+    rules = [
+        {
+            "name": "Policy Coverage",
+            "threshold": "Active coverage without exclusion",
+            "actual_value": "Covered" if is_covered else "Excluded / Inactive",
+            "passed": bool(is_covered)
+        },
+        {
+            "name": "Fraud Risk Threshold",
+            "threshold": "< 30.0",
+            "actual_value": f"{fraud_score:.1f}/100",
+            "passed": fraud_score < 30.0
+        },
+        {
+            "name": "Maximum STP Payout",
+            "threshold": "< $2,000.00",
+            "actual_value": f"${net_payout:,.2f}",
+            "passed": net_payout < 2000.0
+        },
+        {
+            "name": "Subrogation Potential",
+            "threshold": "Not HIGH",
+            "actual_value": subro,
+            "passed": subro != "HIGH"
+        }
+    ]
+
+    all_passed = all(r["passed"] for r in rules)
+    if all_passed:
+        summary_sentence = f"Auto-approved: covered under policy, fraud risk is {fraud_score:.0f}/100, and ${net_payout:,.2f} payout is under the $2,000 limit."
+    elif not is_covered:
+        summary_sentence = "Needs review: policy exclusion or inactive coverage identified. Mandatory human sign-off before denial."
+    elif fraud_score >= 30.0:
+        summary_sentence = f"Needs review: elevated fraud risk score ({fraud_score:.0f}/100) requires adjuster investigation."
+    elif net_payout >= 2000.0:
+        summary_sentence = f"Needs review: net payout (${net_payout:,.2f}) meets or exceeds the $2,000 threshold. Senior sign-off required."
+    elif subro == "HIGH":
+        summary_sentence = "Needs review: high third-party recovery opportunity identified against adverse carrier."
+    else:
+        summary_sentence = "Claim evaluated under carrier governance rules."
+
+    decision_rules = {
+        "all_passed": all_passed,
+        "summary_sentence": summary_sentence,
+        "rules": rules
+    }
+
     return {
         "id": claim.id,
         "claim_number": claim.claim_number,
@@ -411,6 +464,7 @@ async def get_claim_details(claim_number: str, db: AsyncSession = Depends(get_db
         "guidewire_payload": guidewire,
         "itemized_audit": audit_items,
         "agent_trace": trace,
+        "decision_rules": decision_rules,
         "thread_id": claim.thread_id,
         "pdf_path": claim.raw_pdf_path
     }
