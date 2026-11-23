@@ -334,11 +334,43 @@ async def stream_claim_execution(claim_number: str, request: Request, db: AsyncS
 
 
 @router.get("")
-async def list_claims(status: Optional[str] = None, limit: int = 50, db: AsyncSession = Depends(get_db)):
-    """List claims with optional status filtering."""
-    stmt = select(Claim).order_by(desc(Claim.created_at)).limit(limit)
-    if status:
+async def list_claims(
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = 100,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    db: AsyncSession = Depends(get_db)
+):
+    """List claims with optional status filtering, search by ID/VIN/name, and sorting."""
+    stmt = select(Claim)
+    if status and status != "ALL":
         stmt = stmt.where(Claim.status == status)
+    if search:
+        search_term = f"%{search.strip()}%"
+        stmt = stmt.where(
+            (Claim.claim_number.ilike(search_term)) |
+            (Claim.claimant_name_masked.ilike(search_term)) |
+            (Claim.vehicle_vin.ilike(search_term)) |
+            (Claim.policy_number.ilike(search_term))
+        )
+
+    order_col = Claim.created_at
+    if sort_by == "incident_date":
+        order_col = Claim.incident_date
+    elif sort_by == "claimed_amount":
+        order_col = Claim.claimed_amount
+    elif sort_by == "net_payout":
+        order_col = Claim.net_payout
+    elif sort_by == "fraud_risk_score":
+        order_col = Claim.fraud_risk_score
+
+    if sort_order.lower() == "asc":
+        stmt = stmt.order_by(order_col.asc())
+    else:
+        stmt = stmt.order_by(order_col.desc())
+
+    stmt = stmt.limit(limit)
     result = await db.execute(stmt)
     claims = result.scalars().all()
     return claims
