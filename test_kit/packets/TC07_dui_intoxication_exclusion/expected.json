@@ -1,0 +1,16 @@
+{
+  "test_id": "TC07_dui_intoxication_exclusion",
+  "case_name": "Driver Intoxication / Impairment (Policy Exclusion)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    0,
+    40
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": false,
+  "adjuster_action": "DENY",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_DENY",
+  "notes": "Driver impairment exclusion cited. Human denial sign-off required."
+}

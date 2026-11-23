@@ -1,0 +1,16 @@
+{
+  "test_id": "TC14_repair_above_coverage_limit",
+  "case_name": "Repair Cost Exceeds Coverage Limit ($50,000 Cap)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 49500.0,
+  "expected_fraud_score_band": [
+    0,
+    30
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "APPROVE",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_APPROVE",
+  "notes": "Approved cost capped at policy limit ($50,000), minus $500 deductible = $49,500."
+}

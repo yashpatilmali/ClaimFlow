@@ -1,0 +1,16 @@
+{
+  "test_id": "TC09_intentional_damage_exclusion",
+  "case_name": "Intentional Damage Admitted (Exclusion)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    0,
+    40
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": false,
+  "adjuster_action": "DENY",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_DENY",
+  "notes": "Section 3.D intentional damage exclusion. Human adjuster denial."
+}

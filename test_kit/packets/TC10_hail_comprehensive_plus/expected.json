@@ -1,0 +1,16 @@
+{
+  "test_id": "TC10_hail_comprehensive_plus",
+  "case_name": "Hail Damage on Comprehensive Plus Policy",
+  "expected_status": "APPROVED_STP",
+  "expected_net_payout": 1250.0,
+  "expected_fraud_score_band": [
+    0,
+    29
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "NONE",
+  "override_amount": null,
+  "final_resolved_status": "APPROVED_STP",
+  "notes": "Comprehensive Plus coverage with $250 deductible. Auto-approved."
+}

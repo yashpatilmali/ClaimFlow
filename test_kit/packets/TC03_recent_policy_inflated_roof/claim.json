@@ -1,0 +1,14 @@
+{
+  "test_id": "TC03_recent_policy_inflated_roof",
+  "case_name": "Recent Policy Inception + Inflated Roof Repair (Fraud)",
+  "policy_number": "POL-771920",
+  "policy_bound_date": "2026-11-08",
+  "incident_date": "2026-11-12",
+  "loss_type": "Comprehensive",
+  "claimant_name": "Tyler Henderson",
+  "vehicle_vin": "3FA6P0H78HR109876",
+  "claimed_amount": 6800.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": true
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "TC12_boundary_net_payout_1999",
+  "case_name": "Net Payout Exactly $1,999.00 (Boundary Check)",
+  "expected_status": "APPROVED_STP",
+  "expected_net_payout": 1999.0,
+  "expected_fraud_score_band": [
+    0,
+    29
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "NONE",
+  "override_amount": null,
+  "final_resolved_status": "APPROVED_STP",
+  "notes": "Boundary test: payout < $2,000.00 ($1,999.00) auto-approves via STP."
+}

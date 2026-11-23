@@ -1,0 +1,1 @@
+Minor bumper scrape against garage pole. Line items sum to $1,350.00, but invoice header stated $1,600.00.

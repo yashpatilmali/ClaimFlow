@@ -1,0 +1,16 @@
+{
+  "test_id": "TC18_pii_redaction_gate",
+  "case_name": "High PII Content Narrative (Redaction Verification)",
+  "expected_status": "APPROVED_STP",
+  "expected_net_payout": 850.0,
+  "expected_fraud_score_band": [
+    0,
+    29
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "NONE",
+  "override_amount": null,
+  "final_resolved_status": "APPROVED_STP",
+  "notes": "All emails, phone numbers, and SSNs masked before external LLM calls."
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "TC16_duplicate_claim_submission",
+  "case_name": "Duplicate Claim Submission (Same VIN & Invoice Hash)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 850.0,
+  "expected_fraud_score_band": [
+    30,
+    80
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "DENY",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_DENY",
+  "notes": "Duplicate VIN and invoice flagged. Pauses for adjuster investigation."
+}

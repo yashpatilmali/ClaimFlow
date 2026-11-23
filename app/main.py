@@ -11,6 +11,8 @@ from app.api.claims import router as claims_router
 from app.api.hitl import router as hitl_router
 from app.api.dashboard import router as dashboard_router
 from app.api.scenarios import router as scenarios_router
+from app.api.test_kit import router as test_kit_router
+from app.api.demo import router as demo_router
 
 logging.basicConfig(
     level=logging.INFO if not settings.DEBUG else logging.DEBUG,
@@ -60,6 +62,8 @@ app.include_router(claims_router)
 app.include_router(hitl_router)
 app.include_router(dashboard_router)
 app.include_router(scenarios_router)
+app.include_router(test_kit_router)
+app.include_router(demo_router)
 
 
 @app.get("/api/health")

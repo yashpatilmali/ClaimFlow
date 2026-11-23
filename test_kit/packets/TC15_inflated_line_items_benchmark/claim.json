@@ -1,0 +1,14 @@
+{
+  "test_id": "TC15_inflated_line_items_benchmark",
+  "case_name": "Inflated Parts & Labor Rates (Benchmark Capped)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-08",
+  "loss_type": "Collision",
+  "claimant_name": "Chloe Bennett",
+  "vehicle_vin": "4T1B11HK5JU543210",
+  "claimed_amount": 1600.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

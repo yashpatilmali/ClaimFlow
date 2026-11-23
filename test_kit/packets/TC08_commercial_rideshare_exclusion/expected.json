@@ -1,0 +1,16 @@
+{
+  "test_id": "TC08_commercial_rideshare_exclusion",
+  "case_name": "Commercial Ridesharing Without Endorsement (Exclusion)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    0,
+    30
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": false,
+  "adjuster_action": "DENY",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_DENY",
+  "notes": "Section 3.C Commercial Delivery & Rideshare exclusion cited."
+}

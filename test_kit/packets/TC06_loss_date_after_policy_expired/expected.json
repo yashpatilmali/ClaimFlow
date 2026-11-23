@@ -1,0 +1,16 @@
+{
+  "test_id": "TC06_loss_date_after_policy_expired",
+  "case_name": "Loss Date After Policy Expiration (Coverage Expired)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    0,
+    30
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": false,
+  "adjuster_action": "DENY",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_DENY",
+  "notes": "Incident date falls after policy expiration (2027-01-01). Paused for adjuster denial."
+}

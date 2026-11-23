@@ -1,0 +1,14 @@
+{
+  "test_id": "TC02_street_racing_exclusion",
+  "case_name": "Street Racing Drag Contest (Policy Exclusion)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-10",
+  "loss_type": "Collision",
+  "claimant_name": "Alex Mercer",
+  "vehicle_vin": "1HGCR2F83HA001234",
+  "claimed_amount": 3200.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": true
+}

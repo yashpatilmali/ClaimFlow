@@ -1,0 +1,16 @@
+{
+  "test_id": "TC01_clean_bumper_stp",
+  "case_name": "Bumper Tap (Clean STP Auto-Approve)",
+  "expected_status": "APPROVED_STP",
+  "expected_net_payout": 850.0,
+  "expected_fraud_score_band": [
+    0,
+    29
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "NONE",
+  "override_amount": null,
+  "final_resolved_status": "APPROVED_STP",
+  "notes": "Standard collision STP scenario. All criteria pass."
+}

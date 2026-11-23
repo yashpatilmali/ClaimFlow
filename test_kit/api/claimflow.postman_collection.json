@@ -1,0 +1,55 @@
+{
+  "info": {
+    "name": "ClaimFlow AI API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for ClaimFlow AI multi-agent claims adjudication."
+  },
+  "item": [
+    {
+      "name": "System Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/health"
+      }
+    },
+    {
+      "name": "List Claims",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/claims"
+      }
+    },
+    {
+      "name": "Review Queue",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/hitl/queue"
+      }
+    },
+    {
+      "name": "Operations Dashboard KPIs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/dashboard/kpis"
+      }
+    },
+    {
+      "name": "Run TC01 (Clean Bumper STP)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/api/scenarios/scenario_1/execute"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

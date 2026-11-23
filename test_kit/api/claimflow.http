@@ -1,0 +1,20 @@
+### ClaimFlow AI API Requests (VS Code REST Client & cURL)
+@baseUrl = http://localhost:8000
+
+### 1. System Health & Diagnostics
+GET {{baseUrl}}/api/health
+
+### 2. List All Claims
+GET {{baseUrl}}/api/claims?limit=20
+
+### 3. Review Queue (Pending HITL)
+GET {{baseUrl}}/api/hitl/queue
+
+### 4. Operations KPIs
+GET {{baseUrl}}/api/dashboard/kpis
+
+### 5. Execute Demo 1 (Clean STP)
+POST {{baseUrl}}/api/scenarios/scenario_1/execute
+
+### 6. Live Agent SSE Stream (cURL Example)
+# curl -N -X GET http://localhost:8000/api/claims/CLM-1042/stream

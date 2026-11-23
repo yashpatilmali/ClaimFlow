@@ -1,0 +1,14 @@
+{
+  "test_id": "TC07_dui_intoxication_exclusion",
+  "case_name": "Driver Intoxication / Impairment (Policy Exclusion)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-09",
+  "loss_type": "Collision",
+  "claimant_name": "Ethan Cole",
+  "vehicle_vin": "4T1B11HK5JU543210",
+  "claimed_amount": 1250.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "TC02_street_racing_exclusion",
+  "case_name": "Street Racing Drag Contest (Policy Exclusion)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    0,
+    40
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": false,
+  "adjuster_action": "DENY",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_DENY",
+  "notes": "Section 3.B racing exclusion cited. Requires human denial sign-off."
+}

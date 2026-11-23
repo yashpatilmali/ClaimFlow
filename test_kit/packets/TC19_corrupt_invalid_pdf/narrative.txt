@@ -1,0 +1,1 @@
+Submitted an invalid non-PDF binary file as an invoice.

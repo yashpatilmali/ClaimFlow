@@ -1,0 +1,16 @@
+{
+  "test_id": "TC19_corrupt_invalid_pdf",
+  "case_name": "Corrupt Binary / Invalid Document Format",
+  "expected_status": "ERROR_REJECTED",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    0,
+    0
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": false,
+  "adjuster_action": "NONE",
+  "override_amount": null,
+  "final_resolved_status": "ERROR_REJECTED",
+  "notes": "Clear error response returned without crashing or hanging in processing."
+}

@@ -1,0 +1,14 @@
+{
+  "test_id": "TC08_commercial_rideshare_exclusion",
+  "case_name": "Commercial Ridesharing Without Endorsement (Exclusion)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-12",
+  "loss_type": "Collision",
+  "claimant_name": "Kevin Patel",
+  "vehicle_vin": "1G1BE5SM7H7123987",
+  "claimed_amount": 1350.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

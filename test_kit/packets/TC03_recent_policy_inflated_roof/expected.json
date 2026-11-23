@@ -1,0 +1,16 @@
+{
+  "test_id": "TC03_recent_policy_inflated_roof",
+  "case_name": "Recent Policy Inception + Inflated Roof Repair (Fraud)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 0.0,
+  "expected_fraud_score_band": [
+    70,
+    100
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "REFER_SIU",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_REFER_SIU",
+  "notes": "Bound 4 days before crash + severe invoice/narrative discrepancy. SIU referral."
+}

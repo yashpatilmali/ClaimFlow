@@ -1,0 +1,16 @@
+{
+  "test_id": "TC11_boundary_net_payout_2000",
+  "case_name": "Net Payout Exactly $2,000.00 (Boundary Check)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 2000.0,
+  "expected_fraud_score_band": [
+    0,
+    29
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "OVERRIDE_PAYOUT",
+  "override_amount": 1850.0,
+  "final_resolved_status": "RESOLVED_OVERRIDE_PAYOUT",
+  "notes": "Boundary test: payout >= $2,000.00 pauses for senior adjuster override or sign-off."
+}

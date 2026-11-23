@@ -1,0 +1,16 @@
+{
+  "test_id": "TC05_invoice_math_discrepancy",
+  "case_name": "Invoice Line Items Disagree with Stated Total (Self-Check)",
+  "expected_status": "APPROVED_STP",
+  "expected_net_payout": 850.0,
+  "expected_fraud_score_band": [
+    0,
+    29
+  ],
+  "expected_subrogation_likelihood": "LOW",
+  "expected_is_covered": true,
+  "adjuster_action": "NONE",
+  "override_amount": null,
+  "final_resolved_status": "APPROVED_STP",
+  "notes": "Intake self-check catches mismatch and reconciles to calculated line item total ($1,350)."
+}

@@ -1,0 +1,14 @@
+{
+  "test_id": "TC12_boundary_net_payout_1999",
+  "case_name": "Net Payout Exactly $1,999.00 (Boundary Check)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-08",
+  "loss_type": "Collision",
+  "claimant_name": "Elena Rostova",
+  "vehicle_vin": "1HGCR2F83HA001234",
+  "claimed_amount": 2499.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

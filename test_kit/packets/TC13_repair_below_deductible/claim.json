@@ -1,0 +1,14 @@
+{
+  "test_id": "TC13_repair_below_deductible",
+  "case_name": "Repair Cost Below Deductible ($0 Net Payout)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-08",
+  "loss_type": "Collision",
+  "claimant_name": "Marcus Wright",
+  "vehicle_vin": "4T1B11HK5JU543210",
+  "claimed_amount": 220.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

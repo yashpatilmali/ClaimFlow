@@ -1,0 +1,14 @@
+{
+  "test_id": "TC06_loss_date_after_policy_expired",
+  "case_name": "Loss Date After Policy Expiration (Coverage Expired)",
+  "policy_number": "POL-882910",
+  "policy_bound_date": "2025-01-01",
+  "incident_date": "2027-02-15",
+  "loss_type": "Collision",
+  "claimant_name": "David Ross",
+  "vehicle_vin": "1HGCR2F83HA001234",
+  "claimed_amount": 1370.0,
+  "deductible": 500.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

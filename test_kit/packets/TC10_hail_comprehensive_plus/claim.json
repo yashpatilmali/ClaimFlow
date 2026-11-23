@@ -1,0 +1,14 @@
+{
+  "test_id": "TC10_hail_comprehensive_plus",
+  "case_name": "Hail Damage on Comprehensive Plus Policy",
+  "policy_number": "POL-994012",
+  "policy_bound_date": "2026-01-01",
+  "incident_date": "2026-11-08",
+  "loss_type": "Comprehensive",
+  "claimant_name": "Brandon Shaw",
+  "vehicle_vin": "4T1B11HK5JU543210",
+  "claimed_amount": 1500.0,
+  "deductible": 250.0,
+  "coverage_limit": 50000.0,
+  "is_demo_scenario": false
+}

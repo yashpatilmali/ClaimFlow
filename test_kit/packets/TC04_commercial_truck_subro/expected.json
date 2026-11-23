@@ -1,0 +1,16 @@
+{
+  "test_id": "TC04_commercial_truck_subro",
+  "case_name": "Rear-Ended at Red Light by Commercial Truck (Subrogation)",
+  "expected_status": "PENDING_HITL",
+  "expected_net_payout": 1900.0,
+  "expected_fraud_score_band": [
+    0,
+    20
+  ],
+  "expected_subrogation_likelihood": "HIGH",
+  "expected_is_covered": true,
+  "adjuster_action": "APPROVE",
+  "override_amount": null,
+  "final_resolved_status": "RESOLVED_APPROVE",
+  "notes": "High third-party subrogation opportunity against commercial fleet."
+}
