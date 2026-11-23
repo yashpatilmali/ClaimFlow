@@ -7,6 +7,7 @@ import { StatusTag } from '../../components/ui/status-tag';
 import { Skeleton } from '../../components/ui/skeleton';
 import { ErrorState } from '../../components/ui/empty-state';
 import { CaseFileView } from '../case-file/CaseFileView';
+import { AgentRunView } from '../agent-run/AgentRunView';
 import { api } from '../../lib/api-client';
 
 export const ClaimDetailPage: React.FC = () => {
@@ -136,11 +137,10 @@ export const ClaimDetailPage: React.FC = () => {
       {currentView === 'case-file' ? (
         <CaseFileView claim={claim} onRefresh={refetch} />
       ) : (
-        <div className="rounded-panel border border-rule bg-surface p-8 text-center">
-          <Cpu className="h-8 w-8 text-status-processing mx-auto mb-2 animate-pulse" />
-          <h3 className="text-sm font-semibold text-ink">Agent Execution Trace View</h3>
-          <p className="text-xs text-muted mt-1">Connecting to live SSE telemetry pipeline…</p>
-        </div>
+        <AgentRunView
+          claim={claim}
+          onSwitchToCaseFile={() => handleViewChange('case-file')}
+        />
       )}
     </div>
   );
