@@ -1,25 +1,82 @@
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-serif/400.css";
+@import "@fontsource/ibm-plex-serif/400-italic.css";
+@import "@fontsource/ibm-plex-serif/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-ink: #18304F;
+  --color-paper: #F4F6F8;
+  --color-surface: #FFFFFF;
+  --color-rule: #D5DBE3;
+  --color-field-border: #7D8A9C;
+  --color-muted: #5B6B82;
+  --color-highlighter: #FFE58A;
+
+  --status-approved-text: #1E7B4F;
+  --status-approved-bg: #E8F5E9;
+  --status-review-text: #9A5B00;
+  --status-review-bg: #FEF3C7;
+  --status-denied-text: #B42318;
+  --status-denied-bg: #FEE4E2;
+  --status-siu-text: #5B3FA0;
+  --status-siu-bg: #F4EBFF;
+  --status-subro-text: #0E7C7B;
+  --status-subro-bg: #E0F2F1;
+  --status-processing-text: #2457C5;
+  --status-processing-bg: #EFF4FE;
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans min-h-screen selection:bg-blue-600 selection:text-white;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* Reading text max characters per line */
+  .prose-reading {
+    max-width: 75ch;
+  }
+
+  /* Document reading text in IBM Plex Serif */
+  .font-document {
+    font-family: "IBM Plex Serif", Georgia, serif;
+  }
+
+  /* Code & JSON in IBM Plex Mono */
+  .font-payload {
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  /* Tabular numbers for financial and metrics data */
+  .tnum, table, [data-tnum="true"] {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-/* Custom clean light scrollbars */
+/* Subtle scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F4F6F8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #D5DBE3;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #7D8A9C;
 }

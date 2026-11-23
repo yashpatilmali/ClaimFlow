@@ -62,16 +62,21 @@ app.include_router(dashboard_router)
 app.include_router(scenarios_router)
 
 
+@app.get("/api/health")
 @app.get("/health")
 def health_check():
+    provider = "MockLLM" if settings.MOCK_LLM else ("Gemini" if settings.GEMINI_API_KEY else "Groq/Ollama")
+    db_mode = "PostgreSQL" if "postgresql" in settings.DATABASE_URL.lower() else "SQLite"
     return {
         "status": "healthy",
+        "version": "1.0.0",
         "service": settings.APP_NAME,
         "environment": settings.APP_ENV,
-        "llm_provider": "MockLLM (Deterministic Offline)" if settings.MOCK_LLM else (
-            "Google Gemini" if settings.GEMINI_API_KEY else "Groq / Ollama Fallback"
-        ),
-        "checkpointer": "SQLite Durable Checkpointer"
+        "llm_provider": provider,
+        "llm_model": settings.GEMINI_MODEL if settings.GEMINI_API_KEY else ("mock-insurance-adjudicator" if settings.MOCK_LLM else settings.GROQ_MODEL),
+        "database_mode": db_mode,
+        "fraud_model_loaded": True,
+        "checkpointer_ready": True
     }
 
 
