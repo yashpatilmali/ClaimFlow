@@ -8,7 +8,6 @@
 [![React 18](https://img.shields.io/badge/React-18.3-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
@@ -141,9 +140,3 @@ python scripts/dev.py reset      # Cleans and resets the database back to initia
 - **LangGraph:** Orchestrates the 6 AI helpers and pauses claims safely for human sign-off.
 - **React & Tailwind CSS:** Clean, responsive web dashboard that works on both desktop and mobile.
 - **AI Models:** Google Gemini, Groq, and built-in offline MockLLM.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
