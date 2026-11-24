@@ -56,7 +56,7 @@ def emit_guidewire_claim_payload(
             },
             "adjusterAuditTrail": {
                 "orchestratorEngine": "LangGraph Stateful Multi-Agent Graph",
-                "notes": adjuster_notes or "Processed via ValueMomentum ClaimFlow AI Orchestrator.",
+                "notes": adjuster_notes or "Processed via ClaimFlow AI Orchestrator.",
                 "settlementLetterSummary": settlement_letter[:200] + "..." if settlement_letter else "N/A"
             }
         }

@@ -121,10 +121,10 @@ export const DecisionPanel: React.FC<DecisionPanelProps> = ({
       <div className="border-b border-rule pb-3">
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 text-status-review" />
-          <h3 className="text-sm font-bold text-ink">Adjuster Governance Panel</h3>
+          <h3 className="text-sm font-bold text-ink">Claims Officer Decision Panel</h3>
         </div>
         <p className="text-xs text-muted mt-0.5">
-          This claim is paused in durable checkpoint state awaiting human sign-off.
+          This claim is paused awaiting your review and approval.
         </p>
       </div>
 
@@ -132,7 +132,7 @@ export const DecisionPanel: React.FC<DecisionPanelProps> = ({
       {pauseReasons.length > 0 && (
         <div className="rounded-input bg-status-review-bg/50 border border-status-review/30 p-3 space-y-1">
           <span className="text-xs font-semibold text-status-review block">
-            Governance Pause Triggers:
+            Why review is required:
           </span>
           <ul className="text-xs text-ink/90 list-disc list-inside space-y-0.5">
             {pauseReasons.map((reason, idx) => (
@@ -204,7 +204,7 @@ export const DecisionPanel: React.FC<DecisionPanelProps> = ({
       {isOverride && (
         <div className="p-3 rounded-input border border-field-border bg-paper/60 space-y-2">
           <Input
-            label="Adjusted Net Settlement Amount ($)"
+            label="Adjusted Net Settlement Amount (₹)"
             type="number"
             min={0}
             max={coverageLimit}

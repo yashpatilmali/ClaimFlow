@@ -29,9 +29,9 @@ export const PayoutBreakdownSection: React.FC<PayoutBreakdownSectionProps> = ({
       <div className="flex items-center justify-between border-b border-rule pb-2">
         <h3 className="text-base font-bold text-ink flex items-center gap-2">
           <Calculator className="h-4 w-4 text-status-approved" />
-          <span>5. Damage & Deterministic Payout Math</span>
+          <span>5. Payout Calculation</span>
         </h3>
-        <span className="text-xs text-muted">Audited Math Engine</span>
+        <span className="text-xs text-muted">Calculated breakdown</span>
       </div>
 
       <div className="rounded-panel border border-rule bg-surface p-5 space-y-5">
@@ -43,7 +43,7 @@ export const PayoutBreakdownSection: React.FC<PayoutBreakdownSectionProps> = ({
             <span className="text-base font-bold text-ink tnum block">
               {formatCurrency(claimedAmount)}
             </span>
-            <span className="text-[11px] text-muted">Repair shop invoice</span>
+            <span className="text-[11px] text-muted">Workshop bill</span>
           </div>
 
           {/* Step 2: Benchmark Disallowance */}
@@ -54,9 +54,9 @@ export const PayoutBreakdownSection: React.FC<PayoutBreakdownSectionProps> = ({
                 disallowedAmount > 0 ? 'text-status-denied' : 'text-muted'
               }`}
             >
-              {disallowedAmount > 0 ? `-${formatCurrency(disallowedAmount)}` : '$0.00'}
+              {disallowedAmount > 0 ? `-${formatCurrency(disallowedAmount)}` : '₹0.00'}
             </span>
-            <span className="text-[11px] text-muted">Benchmark caps</span>
+            <span className="text-[11px] text-muted">Standard rate caps</span>
           </div>
 
           {/* Step 3: Approved After Benchmark */}
@@ -97,10 +97,10 @@ export const PayoutBreakdownSection: React.FC<PayoutBreakdownSectionProps> = ({
           </div>
           <p className="font-payload text-xs text-ink/90 bg-surface p-2 rounded-input border border-rule/60 select-all">
             {formulaLog ||
-              `max(0, min(${approvedAmount.toFixed(2)}, ${coverageLimit.toFixed(2)}) - ${deductible.toFixed(2)}) = $${netPayout.toFixed(2)}`}
+              `max(0, min(${approvedAmount.toFixed(2)}, ${coverageLimit.toFixed(2)}) - ${deductible.toFixed(2)}) = ₹${netPayout.toFixed(2)}`}
           </p>
           <p className="text-[11px] text-muted italic">
-            Note: All settlement arithmetic is computed deterministically in Python using IEEE 754-safe math. The LLM is strictly isolated from calculating financial figures.
+            Note: All settlement calculations use exact mathematical formulas. The AI never guesses money figures.
           </p>
         </div>
       </div>

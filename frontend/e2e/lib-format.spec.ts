@@ -1,13 +1,34 @@
 import { test, expect } from '@playwright/test';
-import { formatCurrency, formatPercent, formatDuration, formatScore } from '../src/lib/format';
+import {
+  formatCurrency,
+  formatPercent,
+  formatDuration,
+  formatScore,
+  formatDate,
+  formatLakhsCrores,
+  formatTimeIST,
+} from '../src/lib/format';
 import { getStatusMeta, getSubrogationMeta } from '../src/lib/status';
 
-test.describe('Format Utilities Unit Tests', () => {
-  test('formatCurrency formats numbers accurately', () => {
-    expect(formatCurrency(850)).toBe('$850.00');
-    expect(formatCurrency(1350.5)).toBe('$1,350.50');
-    expect(formatCurrency(0)).toBe('$0.00');
-    expect(formatCurrency(null as any)).toBe('$0.00');
+test.describe('Indian Format Utilities Unit Tests', () => {
+  test('formatCurrency formats Indian Rupees (₹) accurately', () => {
+    expect(formatCurrency(850)).toContain('850.00');
+    expect(formatCurrency(850)).toContain('₹');
+    expect(formatCurrency(1350.5)).toContain('1,350.50');
+    expect(formatCurrency(100000)).toContain('1,00,000.00');
+    expect(formatCurrency(0)).toContain('0.00');
+    expect(formatCurrency(null as any)).toContain('0.00');
+  });
+
+  test('formatLakhsCrores formats big Indian numbers in words', () => {
+    expect(formatLakhsCrores(250000)).toBe('₹2.5 lakh');
+    expect(formatLakhsCrores(10000000)).toBe('₹1 crore');
+    expect(formatLakhsCrores(850)).toContain('₹850.00');
+  });
+
+  test('formatDate formats as DD/MM/YYYY', () => {
+    expect(formatDate('2026-11-24')).toBe('24/11/2026');
+    expect(formatDate('2026-01-05')).toBe('05/01/2026');
   });
 
   test('formatPercent formats fractions and decimals', () => {

@@ -67,14 +67,14 @@ export const RulingBlock: React.FC<RulingBlockProps> = ({ status, netPayout, dec
             </div>
             <div>
               <span className="text-xs font-semibold text-muted tracking-wider block uppercase">
-                Adjudication Ruling
+                Claim Decision
               </span>
               <h2 className="text-2xl font-bold text-ink tracking-tight">{meta.label}</h2>
             </div>
           </div>
 
           <div className="text-left sm:text-right">
-            <span className="text-xs text-muted block">Calculated Net Settlement</span>
+            <span className="text-xs text-muted block">Final Payout</span>
             <span className="text-2xl font-extrabold text-ink font-sans tnum">
               {formatCurrency(netPayout)}
             </span>
@@ -86,9 +86,9 @@ export const RulingBlock: React.FC<RulingBlockProps> = ({ status, netPayout, dec
           <div className="pt-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-muted uppercase tracking-wider">
-                Governance Rule Validation
+                Automatic Rule Checks
               </span>
-              <span className="text-xs text-muted">Threshold Check</span>
+              <span className="text-xs text-muted">Pass / Review</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

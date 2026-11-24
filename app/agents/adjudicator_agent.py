@@ -48,19 +48,19 @@ def adjudicator_node(state: ClaimGraphState) -> Dict[str, Any]:
     if len(pause_reasons) == 0:
         logger.info(f"[{state['claim_id']}] STP Criteria satisfied! Auto-approving payout ${net_payout:,.2f}.")
         settlement_letter = (
-            f"VALUEMOMENTUM INSURANCE - CLAIM SETTLEMENT NOTICE\n"
+            f"CLAIMFLOW AUTO INSURANCE - CLAIM SETTLEMENT NOTICE\n"
             f"Claim Number: {state['claim_id']}\n"
             f"Policy: {state.get('policy_number', 'POL-882910')}\n\n"
             f"Dear Policyholder,\n\n"
             f"Your recent auto insurance claim for incident date {intake.get('incident_date')} has been reviewed "
             f"and APPROVED via automated straight-through processing.\n\n"
             f"Summary of Adjudication:\n"
-            f"- Approved Repair Estimate: ${approved_amount:,.2f}\n"
-            f"- Less Policy Deductible: -${deductible:,.2f}\n"
-            f"- Net Payable Settlement: ${net_payout:,.2f}\n\n"
-            f"Payment has been scheduled for electronic funds transfer (EFT). Please contact your assigned "
-            f"adjuster if you have any questions.\n\n"
-            f"Sincerely,\nValueMomentum Automated Adjudication Operations"
+            f"- Approved Repair Estimate: ₹{approved_amount:,.2f}\n"
+            f"- Less Policy Deductible: -₹{deductible:,.2f}\n"
+            f"- Net Payable Settlement: ₹{net_payout:,.2f}\n\n"
+            f"Payment has been scheduled for electronic funds transfer (EFT/IMPS). Please contact your assigned "
+            f"claims officer if you have any questions.\n\n"
+            f"Sincerely,\nClaimFlow Automated Claims Operations"
         )
 
         gw_payload = emit_guidewire_claim_payload(
@@ -128,12 +128,12 @@ def adjudicator_node(state: ClaimGraphState) -> Dict[str, Any]:
         final_payout = 0.0
 
     final_letter = (
-        f"VALUEMOMENTUM INSURANCE - CLAIM DETERMINATION NOTICE\n"
+        f"CLAIMFLOW AUTO INSURANCE - CLAIM DETERMINATION NOTICE\n"
         f"Claim Number: {state['claim_id']}\n"
         f"Adjuster Decision: {adj_decision}\n"
-        f"Final Settlement Payout: ${final_payout:,.2f}\n\n"
+        f"Final Settlement Payout: ₹{final_payout:,.2f}\n\n"
         f"Adjuster Audit Findings:\n{adj_note}\n\n"
-        f"Sincerely,\nValueMomentum Claims Adjuster Services"
+        f"Sincerely,\nClaimFlow Claims Adjuster Services"
     )
 
     gw_resumed = emit_guidewire_claim_payload(

@@ -17,38 +17,38 @@ export interface AgentDetailDrawerProps {
 
 const AGENT_META: Record<string, { title: string; job: string; tools: string[] }> = {
   pii_redactor: {
-    title: 'PII Redaction Gate',
-    job: 'Masks SSNs, phone numbers, emails, and policy IDs using local regex & NER.',
+    title: 'Privacy Protection Gate',
+    job: 'Hides phone numbers, emails, and personal IDs before analysis.',
     tools: ['pii_redactor.redact()', 'pii_redactor.build_token_map()'],
   },
   intake_agent: {
-    title: 'Agent 1: Intake & IDP',
-    job: 'Parses invoice PDF and narrative, extracts line items, and runs math self-check.',
+    title: 'Step 1: Document Reading',
+    job: 'Reads workshop estimate and accident story, extracts items, and checks total.',
     tools: ['pdf_parser.parse_invoice_text()', 'self_check_line_item_math()'],
   },
   policy_agent: {
-    title: 'Agent 2: Policy Coverage (RAG)',
-    job: 'Performs section-chunked hybrid search over auto policies for dates, limits, and exclusions.',
+    title: 'Step 2: Policy Coverage Check',
+    job: 'Checks accident date against active policy and verifies damage coverage.',
     tools: ['rag_engine.verify_coverage()', 'rag_engine.extract_verbatim_citations()'],
   },
   fraud_agent: {
-    title: 'Agent 3: Fraud ML Investigator',
-    job: 'Applies tabular ML gradient-boosted classifier and deterministic red-flag rules.',
+    title: 'Step 3: Fraud Risk Meter',
+    job: 'Checks for bill inflation, mismatch with story, or recent policy purchase.',
     tools: ['fraud_model.predict_proba()', 'evaluate_loss_bind_proximity()', 'detect_parts_discrepancy()'],
   },
   subrogation_agent: {
-    title: 'Agent 4: Subrogation Spotter',
-    job: 'Detects adverse third-party liability cues, driver citations, and commercial carrier entities.',
+    title: 'Step 4: Other Driver Fault Check',
+    job: 'Checks if another driver was at fault to recover money from their insurance.',
     tools: ['detect_adverse_liability()', 'draft_subrogation_demand_packet()'],
   },
   estimator_agent: {
-    title: 'Agent 5: Estimator (Deterministic Math)',
-    job: 'Compares parts/labor to industry benchmarks and executes exact Python payout math.',
+    title: 'Step 5: Payout Calculation',
+    job: 'Checks part and labor prices against standard rates and calculates net payout in Rupees (₹).',
     tools: ['deterministic_math.calculate_payout()', 'benchmark_table.lookup()'],
   },
   adjudicator_agent: {
-    title: 'Agent 6: Adjudicator & Governance',
-    job: 'Evaluates STP criteria, authorizes straight-through settlement or interrupts for adjuster sign-off.',
+    title: 'Step 6: Final Claim Decision',
+    job: 'Approves instant payout if all checks pass, or holds for claims officer review.',
     tools: ['langgraph.interrupt()', 'emit_guidewire_claim_payload()'],
   },
 };

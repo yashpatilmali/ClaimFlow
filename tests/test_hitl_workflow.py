@@ -22,7 +22,7 @@ def test_scenario_1_clean_stp_auto_approve():
     assert result.get("estimator", {}).get("net_payout") == 850.00
     assert result.get("fraud", {}).get("fraud_risk_score") < 30.0
     assert result.get("subrogation", {}).get("subrogation_likelihood") == "LOW"
-    assert "VALUEMOMENTUM INSURANCE - CLAIM SETTLEMENT NOTICE" in adjudication.get("settlement_letter", "")
+    assert "CLAIMFLOW AUTO INSURANCE - CLAIM SETTLEMENT NOTICE" in adjudication.get("settlement_letter", "")
     assert "guidewireHeader" in adjudication.get("guidewire_payload", {})
 
 

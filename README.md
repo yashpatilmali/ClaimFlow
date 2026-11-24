@@ -2,9 +2,9 @@
 
 # ClaimFlow AI
 ### Autonomous Multi-Agent P&C Auto Claims Adjudication, Fraud & Subrogation Orchestrator
-**Production-Grade Architecture Tailored for Property & Casualty Insurance (ValueMomentum)**
+**Production-Grade Architecture for Property & Casualty Auto Insurance**
 
-[![CI Status](https://github.com/valuemomentum/claimflow-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/valuemomentum/claimflow-ai/actions)
+[![CI Status](https://github.com/claimflow/claimflow-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/claimflow/claimflow-ai/actions)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/Orchestrator-LangGraph_v0.2+-orange.svg)](https://github.com/langchain-ai/langgraph)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI_Async+SSE-009688.svg)](https://fastapi.tiangolo.com/)
@@ -16,7 +16,7 @@
 
 ---
 
-## 1. Executive Summary & ValueMomentum Alignment
+## 1. Executive Summary
 
 **ClaimFlow AI** is an enterprise-grade multi-agent claims adjudication system designed to transform Property & Casualty (P&C) auto claims processing. 
 
@@ -79,7 +79,7 @@ ClaimFlow AI runs locally out of the box with zero paid API keys (`MOCK_LLM=true
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/valuemomentum/claimflow-ai.git
+git clone https://github.com/claimflow/claimflow-ai.git
 cd claimflow-ai
 
 # 2. Automated cross-platform setup (installs deps & builds test kit)
@@ -151,5 +151,5 @@ The repository includes 19 pre-generated synthetic test packets in `test_kit/pac
 ---
 
 <div align="center">
-Crafted for ValueMomentum Insurance Technology Solutions
+Crafted for Modern Auto Insurance Claims Automation
 </div>

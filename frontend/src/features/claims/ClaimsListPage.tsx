@@ -82,9 +82,9 @@ export const ClaimsListPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-ink">Claims Directory</h1>
+          <h1 className="text-xl font-bold text-ink">Claims</h1>
           <p className="text-xs text-muted mt-0.5">
-            Monitor, inspect, and adjudicate all auto insurance claims.
+            View, track, and manage all auto insurance claims.
           </p>
         </div>
 

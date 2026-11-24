@@ -398,44 +398,44 @@ async def get_claim_details(claim_number: str, db: AsyncSession = Depends(get_db
 
     rules = [
         {
-            "name": "Policy Coverage",
-            "threshold": "Active coverage without exclusion",
+            "name": "Policy coverage",
+            "threshold": "Active policy without exclusion",
             "actual_value": "Covered" if is_covered else "Excluded / Inactive",
             "passed": bool(is_covered)
         },
         {
-            "name": "Fraud Risk Threshold",
+            "name": "Fraud risk meter",
             "threshold": "< 30.0",
             "actual_value": f"{fraud_score:.1f}/100",
             "passed": fraud_score < 30.0
         },
         {
-            "name": "Maximum STP Payout",
-            "threshold": "< $2,000.00",
-            "actual_value": f"${net_payout:,.2f}",
+            "name": "Instant approval limit",
+            "threshold": "< ₹2,000.00",
+            "actual_value": f"₹{net_payout:,.2f}",
             "passed": net_payout < 2000.0
         },
         {
-            "name": "Subrogation Potential",
-            "threshold": "Not HIGH",
-            "actual_value": subro,
+            "name": "Other driver at fault",
+            "threshold": "No other party recovery",
+            "actual_value": "Other driver liable" if subro == "HIGH" else "None",
             "passed": subro != "HIGH"
         }
     ]
 
     all_passed = all(r["passed"] for r in rules)
     if all_passed:
-        summary_sentence = f"Auto-approved: covered under policy, fraud risk is {fraud_score:.0f}/100, and ${net_payout:,.2f} payout is under the $2,000 limit."
+        summary_sentence = f"Auto-approved: covered under policy, fraud risk is {fraud_score:.0f}/100, and ₹{net_payout:,.2f} payout is within the ₹2,000 limit."
     elif not is_covered:
-        summary_sentence = "Needs review: policy exclusion or inactive coverage identified. Mandatory human sign-off before denial."
+        summary_sentence = "Needs review: policy exclusion or inactive coverage identified. Claims officer confirmation required before denial."
     elif fraud_score >= 30.0:
-        summary_sentence = f"Needs review: elevated fraud risk score ({fraud_score:.0f}/100) requires adjuster investigation."
+        summary_sentence = f"Needs review: fraud risk score ({fraud_score:.0f}/100) requires verification."
     elif net_payout >= 2000.0:
-        summary_sentence = f"Needs review: net payout (${net_payout:,.2f}) meets or exceeds the $2,000 threshold. Senior sign-off required."
+        summary_sentence = f"Needs review: net payout (₹{net_payout:,.2f}) meets or exceeds ₹2,000. Officer sign-off required."
     elif subro == "HIGH":
-        summary_sentence = "Needs review: high third-party recovery opportunity identified against adverse carrier."
+        summary_sentence = "Needs review: other vehicle was at fault. Opportunity to recover money from their insurance."
     else:
-        summary_sentence = "Claim evaluated under carrier governance rules."
+        summary_sentence = "Claim evaluated under standard motor insurance rules."
 
     decision_rules = {
         "all_passed": all_passed,

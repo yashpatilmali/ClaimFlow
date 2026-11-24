@@ -39,7 +39,7 @@ def intake_node(state: ClaimGraphState) -> Dict[str, Any]:
 
     # 3. Formulate Prompt with Injection Defenses
     prompt = f"""{PROMPT_INJECTION_SYSTEM_GUARD}
-You are the Intake Agent (FNOL & Invoice Data Processing) for ValueMomentum Auto Insurance.
+You are the Intake Agent (FNOL & Invoice Data Processing) for ClaimFlow Auto Insurance.
 Extract the structured claim details from the verified loss report and repair invoice below:
 
 {wrap_untrusted_input(redacted_narrative, 'untrusted_claimant_narrative')}

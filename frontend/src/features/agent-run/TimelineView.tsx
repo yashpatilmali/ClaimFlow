@@ -29,57 +29,57 @@ interface StepConfig {
 const STEPS: StepConfig[] = [
   {
     key: 'pii_redactor',
-    title: 'PII Redaction Gate',
-    subtitle: 'Security & Compliance',
-    description: 'Masks SSNs, phone numbers, emails, and policy IDs prior to model processing.',
+    title: 'Privacy Protection Gate',
+    subtitle: 'Data security',
+    description: 'Masks phone numbers, emails, and personal IDs before analysis.',
   },
   {
     key: 'intake_agent',
-    number: 'Agent 1',
-    title: 'Intake & Document Parsing',
-    subtitle: 'Multimodal / OCR',
-    description: 'Parses repair invoices and incident narratives; extracts items and runs math self-check.',
+    number: 'Step 1',
+    title: 'Document & Bill Reading',
+    subtitle: 'Extracts parts & labor',
+    description: 'Reads workshop estimate, extracts line items, and checks bill total.',
   },
 ];
 
 const PARALLEL_STEPS: StepConfig[] = [
   {
     key: 'policy_agent',
-    number: 'Agent 2',
-    title: 'Policy Coverage (RAG)',
-    subtitle: 'Coverage & Exclusions',
-    description: 'Checks loss date, verifies collision/comprehensive limits, and extracts policy quotes.',
+    number: 'Step 2',
+    title: 'Policy Coverage Check',
+    subtitle: 'Terms & exclusions',
+    description: 'Checks accident date against active policy and verifies damage coverage.',
   },
   {
     key: 'fraud_agent',
-    number: 'Agent 3',
-    title: 'Fraud Anomaly (ML)',
-    subtitle: 'Risk Scoring & Rules',
-    description: 'Gradient boosted risk classifier + deterministic red flag rules.',
+    number: 'Step 3',
+    title: 'Fraud Risk Meter',
+    subtitle: 'Risk score 0-100',
+    description: 'Checks for bill inflation, mismatch with story, or recent policy purchase.',
   },
   {
     key: 'subrogation_agent',
-    number: 'Agent 4',
-    title: 'Subrogation Spotter',
-    subtitle: 'Third-Party Recovery',
-    description: 'Scans police narrative for adverse liability cues and carrier identification.',
+    number: 'Step 4',
+    title: 'Other Driver Fault Check',
+    subtitle: 'Third-party recovery',
+    description: 'Checks police challan and accident story to spot at-fault commercial vehicles.',
   },
 ];
 
 const POST_PARALLEL_STEPS: StepConfig[] = [
   {
     key: 'estimator_agent',
-    number: 'Agent 5',
-    title: 'Estimator & Cost Audit',
-    subtitle: 'Deterministic Math',
-    description: 'Validates parts/labor against regional benchmarks and applies limits/deductibles.',
+    number: 'Step 5',
+    title: 'Payout Calculation',
+    subtitle: 'In Indian Rupees (₹)',
+    description: 'Caps parts/labor at standard rates and calculates net payout minus deductible.',
   },
   {
     key: 'adjudicator_agent',
-    number: 'Agent 6',
-    title: 'Adjudicator & Governance',
-    subtitle: 'STP Decision Engine',
-    description: 'Validates all governance gates, routes to straight-through payment or human adjuster review.',
+    number: 'Step 6',
+    title: 'Final Claim Decision',
+    subtitle: 'Approval or review',
+    description: 'Instant auto-approval for low-risk claims, or pauses for claims officer review.',
   },
 ];
 
@@ -191,9 +191,9 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-semibold text-ink">
             <Layers className="h-4 w-4 text-status-processing" />
-            <span>Parallel Verification Group</span>
+            <span>3 Instant Checks (Running Together)</span>
           </div>
-          <span className="text-[11px] text-muted">Concurrent execution in LangGraph fan-out</span>
+          <span className="text-[11px] text-muted">Policy, fraud, and fault checks run at the same time</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

@@ -112,7 +112,7 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 295, y: 70 },
         data: {
           id: 'pii_redactor',
-          label: 'PII Redaction Gate',
+          label: 'Privacy Check',
           sublabel: 'Gate',
           status: agentStatus.pii_redactor?.status,
           latency_ms: agentStatus.pii_redactor?.latency_ms,
@@ -125,8 +125,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 295, y: 170 },
         data: {
           id: 'intake_agent',
-          label: 'Intake & IDP',
-          sublabel: 'Agent 1',
+          label: 'Bill & Story Reading',
+          sublabel: 'Step 1',
           status: agentStatus.intake_agent?.status,
           latency_ms: agentStatus.intake_agent?.latency_ms,
           isSelected: selectedAgent === 'intake_agent',
@@ -139,8 +139,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 60, y: 280 },
         data: {
           id: 'policy_agent',
-          label: 'Policy Coverage RAG',
-          sublabel: 'Agent 2 (Parallel)',
+          label: 'Policy Coverage',
+          sublabel: 'Step 2 (Parallel)',
           status: agentStatus.policy_agent?.status,
           latency_ms: agentStatus.policy_agent?.latency_ms,
           isSelected: selectedAgent === 'policy_agent',
@@ -152,8 +152,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 295, y: 280 },
         data: {
           id: 'fraud_agent',
-          label: 'Fraud Anomaly ML',
-          sublabel: 'Agent 3 (Parallel)',
+          label: 'Fraud Risk Meter',
+          sublabel: 'Step 3 (Parallel)',
           status: agentStatus.fraud_agent?.status,
           latency_ms: agentStatus.fraud_agent?.latency_ms,
           isSelected: selectedAgent === 'fraud_agent',
@@ -165,8 +165,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 530, y: 280 },
         data: {
           id: 'subrogation_agent',
-          label: 'Subrogation Spotter',
-          sublabel: 'Agent 4 (Parallel)',
+          label: 'Other Driver Fault',
+          sublabel: 'Step 4 (Parallel)',
           status: agentStatus.subrogation_agent?.status,
           latency_ms: agentStatus.subrogation_agent?.latency_ms,
           isSelected: selectedAgent === 'subrogation_agent',
@@ -179,8 +179,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 295, y: 400 },
         data: {
           id: 'estimator_agent',
-          label: 'Estimator (Math)',
-          sublabel: 'Agent 5',
+          label: 'Payout Math (₹)',
+          sublabel: 'Step 5',
           status: agentStatus.estimator_agent?.status,
           latency_ms: agentStatus.estimator_agent?.latency_ms,
           isSelected: selectedAgent === 'estimator_agent',
@@ -192,8 +192,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         position: { x: 295, y: 500 },
         data: {
           id: 'adjudicator_agent',
-          label: 'Adjudicator & STP',
-          sublabel: 'Agent 6',
+          label: 'Final Claim Decision',
+          sublabel: 'Step 6',
           status: agentStatus.adjudicator_agent?.status,
           latency_ms: agentStatus.adjudicator_agent?.latency_ms,
           isSelected: selectedAgent === 'adjudicator_agent',
@@ -206,8 +206,8 @@ export const FlowGraphView: React.FC<FlowGraphViewProps> = ({
         data: {
           label:
             agentStatus.adjudicator_agent?.status === 'paused'
-              ? 'Human Review'
-              : 'Claim Resolved',
+              ? 'Officer Review'
+              : 'Claim Approved',
         },
       },
     ];

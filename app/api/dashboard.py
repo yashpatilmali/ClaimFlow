@@ -10,7 +10,7 @@ router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
 @router.get("/kpis")
 async def get_dashboard_kpis(db: AsyncSession = Depends(get_db)):
     """
-    Returns operations KPIs for ValueMomentum executive claims monitoring:
+    Returns operations KPIs for claims monitoring:
     - STP Rate %
     - Avg Triage Latency (seconds)
     - Estimated Fraud Leakage Prevented ($)

@@ -56,7 +56,7 @@ export const Sidebar: React.FC = () => {
           {!collapsed && (
             <div className="overflow-hidden">
               <span className="font-bold text-sm text-ink block leading-tight">ClaimFlow</span>
-              <span className="text-xs text-muted block leading-tight">P&C Orchestrator</span>
+              <span className="text-xs text-muted block leading-tight">Auto Claims</span>
             </div>
           )}
         </div>

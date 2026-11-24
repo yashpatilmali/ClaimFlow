@@ -18,7 +18,7 @@ class BenchmarkRule(BaseModel):
     max_hours: Optional[float] = None
 
 
-# Default automotive repair industry benchmarks (ValueMomentum P&C benchmark baseline)
+# Default automotive repair industry benchmarks baseline
 DEFAULT_BENCHMARKS: Dict[str, BenchmarkRule] = {
     "front bumper cover": BenchmarkRule(category="parts", max_unit_cost=650.00),
     "rear bumper cover": BenchmarkRule(category="parts", max_unit_cost=600.00),

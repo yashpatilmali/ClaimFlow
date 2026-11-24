@@ -37,7 +37,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Multi-Agent P&C Auto Claims Adjudication, Fraud & Subrogation Orchestrator for ValueMomentum",
+    description="Multi-Agent P&C Auto Claims Adjudication, Fraud & Subrogation Orchestrator",
     version="1.0.0",
     lifespan=lifespan
 )

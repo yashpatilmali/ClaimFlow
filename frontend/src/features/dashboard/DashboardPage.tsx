@@ -29,7 +29,7 @@ import { Button } from '../../components/ui/button';
 import { Skeleton } from '../../components/ui/skeleton';
 import { ErrorState } from '../../components/ui/empty-state';
 import { api } from '../../lib/api-client';
-import { formatCurrency, formatPercent } from '../../lib/format';
+import { formatCurrency, formatPercent, formatLakhsCrores } from '../../lib/format';
 
 export const DashboardPage: React.FC = () => {
   const {
@@ -156,9 +156,9 @@ export const DashboardPage: React.FC = () => {
             <div className="flex items-center justify-between text-muted text-xs font-semibold">
               <span className="flex items-center gap-1.5">
                 <Zap className="h-3.5 w-3.5 text-status-approved" />
-                <span>Straight-Through Rate</span>
+                <span>Auto-Approved Rate</span>
               </span>
-              <span title="Claims authorized automatically without human review / Total claims">
+              <span title="Claims approved automatically without human review">
                 <HelpCircle className="h-3 w-3 text-muted/60" />
               </span>
             </div>
@@ -167,7 +167,7 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           <p className="mt-3 text-[11px] text-muted border-t border-rule/60 pt-2">
-            Target benchmark: 40.0% · No human touch required
+            Target: 40.0% · Instant settlement
           </p>
         </div>
 
@@ -177,9 +177,9 @@ export const DashboardPage: React.FC = () => {
             <div className="flex items-center justify-between text-muted text-xs font-semibold">
               <span className="flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-status-processing" />
-                <span>Average Triage Speed</span>
+                <span>Average Decision Time</span>
               </span>
-              <span title="Total latency for multimodal parsing, 3 parallel checks, cost math, and ruling">
+              <span title="Total time to scan bills, run policy/fraud checks, and calculate payout">
                 <HelpCircle className="h-3 w-3 text-muted/60" />
               </span>
             </div>
@@ -188,7 +188,7 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           <p className="mt-3 text-[11px] text-muted border-t border-rule/60 pt-2">
-            Full 6-agent orchestration pipeline runtime
+            Full 6-step automatic check
           </p>
         </div>
 
@@ -198,18 +198,18 @@ export const DashboardPage: React.FC = () => {
             <div className="flex items-center justify-between text-muted text-xs font-semibold">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="h-3.5 w-3.5 text-status-denied" />
-                <span>Fraud Leakage Prevented</span>
+                <span>Fraud Prevented</span>
               </span>
-              <span title="Disallowed parts/labor markup plus suspicious claims halted for SIU">
+              <span title="Disallowed workshop markups plus suspicious claims caught">
                 <HelpCircle className="h-3 w-3 text-muted/60" />
               </span>
             </div>
             <div className="mt-2 text-2xl font-bold text-ink font-payload">
-              {formatCurrency(summary.fraud_leakage_prevented_dollars || 0)}
+              {formatLakhsCrores(summary.fraud_leakage_prevented_dollars || 0)}
             </div>
           </div>
           <p className="mt-3 text-[11px] text-muted border-t border-rule/60 pt-2">
-            Benchmark cost audits & SIU referrals
+            Parts cost capping & suspicious bill detection
           </p>
         </div>
 
@@ -219,18 +219,18 @@ export const DashboardPage: React.FC = () => {
             <div className="flex items-center justify-between text-muted text-xs font-semibold">
               <span className="flex items-center gap-1.5">
                 <TrendingUp className="h-3.5 w-3.5 text-status-subrogation" />
-                <span>Subrogation Flagged</span>
+                <span>Other Driver Recovery</span>
               </span>
-              <span title="Estimated third-party recoveries identified by police report analysis">
+              <span title="Estimated money recovered from at-fault vehicle insurance">
                 <HelpCircle className="h-3 w-3 text-muted/60" />
               </span>
             </div>
             <div className="mt-2 text-2xl font-bold text-ink font-payload">
-              {formatCurrency(summary.subrogation_opportunities_dollars || 0)}
+              {formatLakhsCrores(summary.subrogation_opportunities_dollars || 0)}
             </div>
           </div>
           <p className="mt-3 text-[11px] text-muted border-t border-rule/60 pt-2">
-            {summary.subrogation_claims_count || 0} commercial & adverse driver recoveries
+            {summary.subrogation_claims_count || 0} commercial & at-fault driver cases
           </p>
         </div>
       </div>
@@ -363,7 +363,7 @@ export const DashboardPage: React.FC = () => {
                   axisLine={{ stroke: '#D5DBE3' }}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="avg_payout" name="Average net payout ($)" fill="#2457C5" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="avg_payout" name="Average net payout (₹)" fill="#2457C5" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -1,6 +1,6 @@
 # ClaimFlow AI — Testing Guide & Sample Materials
 
-This guide provides simple, step-by-step instructions and ready-to-use copy-paste materials to test **ClaimFlow AI**, the Multi-Agent P&C Auto Claims Orchestrator built for ValueMomentum.
+This guide provides simple, step-by-step instructions and ready-to-use copy-paste materials to test **ClaimFlow AI**, the Multi-Agent P&C Auto Claims Orchestrator.
 
 ---
 

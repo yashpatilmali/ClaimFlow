@@ -142,10 +142,10 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
                   <TableCell sx={{ fontSize: '0.78rem' }}>{item.incident_date}</TableCell>
                   <TableCell align="right">
                     <Typography sx={{ fontSize: '0.72rem', color: 'text.disabled', textDecoration: 'line-through' }}>
-                      ${item.claimed_amount?.toLocaleString()}
+                      ₹{item.claimed_amount?.toLocaleString('en-IN')}
                     </Typography>
                     <Typography sx={{ fontSize: '0.82rem', fontWeight: 700, color: 'success.main', fontFamily: 'monospace' }}>
-                      ${item.calculated_net_payout?.toLocaleString()}
+                      ₹{item.calculated_net_payout?.toLocaleString('en-IN')}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
@@ -200,10 +200,10 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
               {/* Financial Summary */}
               <Grid container spacing={2} sx={{ mb: 2.5 }}>
                 {[
-                  { label: 'Claimed', value: `$${selectedClaim.claimed_amount?.toLocaleString()}`, color: 'text.primary' },
-                  { label: 'Disallowed', value: `-$${selectedClaim.disallowed_amount?.toLocaleString()}`, color: 'error.main' },
-                  { label: 'Deductible', value: `-$${selectedClaim.deductible?.toLocaleString()}`, color: 'text.secondary' },
-                  { label: 'Net Payout', value: `$${selectedClaim.calculated_net_payout?.toLocaleString()}`, color: 'success.main' },
+                  { label: 'Claimed', value: `₹${selectedClaim.claimed_amount?.toLocaleString('en-IN')}`, color: 'text.primary' },
+                  { label: 'Disallowed', value: `-₹${selectedClaim.disallowed_amount?.toLocaleString('en-IN')}`, color: 'error.main' },
+                  { label: 'Deductible', value: `-₹${selectedClaim.deductible?.toLocaleString('en-IN')}`, color: 'text.secondary' },
+                  { label: 'Net Payout', value: `₹${selectedClaim.calculated_net_payout?.toLocaleString('en-IN')}`, color: 'success.main' },
                 ].map((m) => (
                   <Grid size={{ xs: 6, sm: 3 }} key={m.label}>
                     <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
@@ -246,7 +246,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
               <Typography variant="subtitle2" sx={{ mb: 1, color: 'text.primary' }}>Adjuster Decision</Typography>
               <ToggleButtonGroup value={decision} exclusive onChange={handleDecisionChange} fullWidth size="small" sx={{ mb: 2 }}>
                 <ToggleButton value="APPROVE" sx={{ fontSize: '0.72rem', fontWeight: 700 }} color="success">
-                  Approve (${selectedClaim.calculated_net_payout?.toLocaleString()})
+                  Approve (₹{selectedClaim.calculated_net_payout?.toLocaleString('en-IN')})
                 </ToggleButton>
                 <ToggleButton value="OVERRIDE_PAYOUT" sx={{ fontSize: '0.72rem', fontWeight: 700 }} color="primary">
                   Override Payout
@@ -261,7 +261,7 @@ export const HITLQueueTable: React.FC<HITLQueueTableProps> = ({ queue, onSubmitD
 
               {decision === 'OVERRIDE_PAYOUT' && (
                 <TextField
-                  fullWidth size="small" label="Override Payout Amount ($)" type="number"
+                  fullWidth size="small" label="Override Payout Amount (₹)" type="number"
                   value={overrideAmount} onChange={(e) => setOverrideAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
                   slotProps={{
                     input: { sx: { fontFamily: 'monospace' } },

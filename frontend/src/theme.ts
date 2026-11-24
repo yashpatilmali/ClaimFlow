@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-// ClaimFlow AI — Executive White / Light Theme for ValueMomentum
+// ClaimFlow AI — Executive Light Theme
 const theme = createTheme({
   palette: {
     mode: 'light',

@@ -246,11 +246,11 @@ export const TestLabPage: React.FC = () => {
         </span>
         {[
           { id: 'all', label: `All (${packets.length})` },
-          { id: 'demo', label: 'Demo scenarios (4)' },
-          { id: 'stp', label: 'Straight-through STP' },
-          { id: 'review', label: 'Needs review (HITL)' },
+          { id: 'demo', label: 'Sample cases (4)' },
+          { id: 'stp', label: 'Auto-approved' },
+          { id: 'review', label: 'Needs review' },
           { id: 'fraud', label: 'Fraud / SIU' },
-          { id: 'subro', label: 'Subrogation' },
+          { id: 'subro', label: 'Other driver at fault' },
         ].map((tab) => (
           <button
             key={tab.id}

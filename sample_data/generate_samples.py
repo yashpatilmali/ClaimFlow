@@ -46,8 +46,8 @@ def build_standard_policy():
     )
 
     story = [
-        Paragraph("VALUEMOMENTUM ASSURANCE GROUP", title_style),
-        Paragraph("Personal Auto Insurance Policy - Form VM-PA-2026", ParagraphStyle('Sub', parent=body_style, alignment=1, textColor=colors.gray)),
+        Paragraph("CLAIMFLOW ASSURANCE GROUP", title_style),
+        Paragraph("Personal Auto Insurance Policy - Form CF-PA-2026", ParagraphStyle('Sub', parent=body_style, alignment=1, textColor=colors.gray)),
         Spacer(1, 15),
         Paragraph("<b>POLICY DECLARATIONS PAGE</b>", h2_style),
         Paragraph("<b>Policy Number:</b> POL-882910 &nbsp;&nbsp;|&nbsp;&nbsp; <b>Policy Period:</b> 2026-01-01 to 2027-01-01", body_style),
@@ -85,8 +85,8 @@ def build_comprehensive_plus_policy():
     body_style = ParagraphStyle('DocBody', parent=styles['BodyText'], fontName='Helvetica', fontSize=9.5, leading=13, spaceBefore=3, spaceAfter=4)
 
     story = [
-        Paragraph("VALUEMOMENTUM ASSURANCE GROUP", title_style),
-        Paragraph("Comprehensive Plus Auto Policy - Form VM-CAP-PLUS", ParagraphStyle('Sub', parent=body_style, alignment=1, textColor=colors.gray)),
+        Paragraph("CLAIMFLOW ASSURANCE GROUP", title_style),
+        Paragraph("Comprehensive Plus Auto Policy - Form CF-CAP-PLUS", ParagraphStyle('Sub', parent=body_style, alignment=1, textColor=colors.gray)),
         Spacer(1, 15),
         Paragraph("<b>POLICY DECLARATIONS PAGE</b>", h2_style),
         Paragraph("<b>Policy Number:</b> POL-994102 &nbsp;&nbsp;|&nbsp;&nbsp; <b>Policy Period:</b> 2026-03-01 to 2027-03-01", body_style),
@@ -103,7 +103,7 @@ def build_comprehensive_plus_policy():
         Paragraph("<b>2.B Fraudulent or Exaggerated Claims:</b> Any deliberate inflation of repair estimates or misrepresentation of impact cause voids coverage.", body_style),
         Spacer(1, 10),
         Paragraph("<b>SECTION 3 — THIRD-PARTY SUBROGATION ASSIGNMENT</b>", h2_style),
-        Paragraph("ValueMomentum reserves all legal rights to demand indemnification from at-fault third parties and their carriers.", body_style),
+        Paragraph("ClaimFlow Insurance reserves all legal rights to demand indemnification from at-fault third parties and their carriers.", body_style),
     ]
     doc.build(story)
 

@@ -17,7 +17,7 @@ import { StatusTag } from '../../components/ui/status-tag';
 import { Skeleton } from '../../components/ui/skeleton';
 import { EmptyState, ErrorState } from '../../components/ui/empty-state';
 import { api } from '../../lib/api-client';
-import { formatCurrency, formatPercent } from '../../lib/format';
+import { formatCurrency, formatPercent, formatDate } from '../../lib/format';
 
 type PrioritySort = 'high-risk' | 'high-amount' | 'newest';
 type ReasonFilter = 'all' | 'exclusion' | 'fraud' | 'payout' | 'subro';
@@ -116,8 +116,8 @@ export const ReviewQueuePage: React.FC = () => {
 
     if (isCovered === false) flags.push('Policy Exclusion');
     if (fraud >= 30) flags.push(`Fraud risk ${fraud.toFixed(0)}/100`);
-    if (payout >= 2000) flags.push('Payout ≥ $2,000');
-    if (subro === 'HIGH') flags.push('High subrogation');
+    if (payout >= 2000) flags.push('Payout ≥ ₹2,000');
+    if (subro === 'HIGH') flags.push('Other driver at fault');
 
     if (item.pause_reasons && item.pause_reasons.length > 0) {
       item.pause_reasons.forEach((r: string) => {
@@ -127,7 +127,7 @@ export const ReviewQueuePage: React.FC = () => {
       });
     }
 
-    return flags.length > 0 ? flags : ['Adjuster Review Required'];
+    return flags.length > 0 ? flags : ['Review Needed'];
   };
 
   return (
@@ -136,13 +136,13 @@ export const ReviewQueuePage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rule pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-ink">Adjuster Review Queue</h1>
+            <h1 className="text-xl font-bold text-ink">Review Queue</h1>
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-status-review/15 text-status-review font-payload">
               {queue.length}
             </span>
           </div>
           <p className="text-sm text-muted mt-1 prose-reading">
-            Claims paused by governance rules awaiting human sign-off, override, or denial.
+            Claims waiting for a claims officer to review and approve.
           </p>
         </div>
 
@@ -154,7 +154,7 @@ export const ReviewQueuePage: React.FC = () => {
           className="h-8 gap-1.5 text-xs shrink-0"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? 'animate-spin' : ''}`} />
-          <span>Refresh queue</span>
+          <span>Refresh</span>
         </Button>
       </div>
 
@@ -169,8 +169,8 @@ export const ReviewQueuePage: React.FC = () => {
             { id: 'all', label: 'All reasons' },
             { id: 'exclusion', label: 'Policy exclusion' },
             { id: 'fraud', label: 'Fraud risk 30+' },
-            { id: 'payout', label: 'Payout ≥ $2,000' },
-            { id: 'subro', label: 'High subrogation' },
+            { id: 'payout', label: 'Payout ≥ ₹2,000' },
+            { id: 'subro', label: 'Other driver at fault' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -254,7 +254,7 @@ export const ReviewQueuePage: React.FC = () => {
                       {item.claimant_name || 'Insured'}
                     </span>
                     <span className="text-xs text-muted">·</span>
-                    <span className="text-xs text-muted">Loss: {item.incident_date}</span>
+                    <span className="text-xs text-muted">Accident: {formatDate(item.incident_date)}</span>
                   </div>
 
                   {/* Pause Reason Flags */}

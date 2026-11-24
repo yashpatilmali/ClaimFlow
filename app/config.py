@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     POLICY_BIND_SUSPICIOUS_DAYS: int = 15
 
     # Simulated Guidewire Webhook
-    GUIDEWIRE_WEBHOOK_URL: str = "https://claimcenter.mock.valuemomentum.internal/api/claims/v1"
+    GUIDEWIRE_WEBHOOK_URL: str = "https://claimcenter.mock.claimflow.internal/api/claims/v1"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

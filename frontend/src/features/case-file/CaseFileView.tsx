@@ -20,12 +20,12 @@ export const CaseFileView: React.FC<CaseFileViewProps> = ({ claim, onRefresh }) 
 
   const navItems = [
     { id: 'what-happened', label: '1. What happened' },
-    { id: 'coverage', label: '2. Coverage & RAG' },
-    { id: 'fraud-risk', label: '3. Fraud risk' },
-    { id: 'subrogation', label: '4. Subrogation' },
-    { id: 'payout-math', label: '5. Payout math' },
-    { id: 'letters', label: '6. Letters & handoff' },
-    { id: 'audit-log', label: '7. Audit log' },
+    { id: 'coverage', label: '2. Policy coverage' },
+    { id: 'fraud-risk', label: '3. Fraud check' },
+    { id: 'subrogation', label: '4. Other driver fault' },
+    { id: 'payout-math', label: '5. Payout calculation' },
+    { id: 'letters', label: '6. Documents & letters' },
+    { id: 'audit-log', label: '7. Activity log' },
   ];
 
   const scrollTo = (id: string) => {

@@ -38,8 +38,8 @@ interface KPIDashboardProps {
 const KPI_CARDS = [
   { key: 'stp_rate_percentage', label: 'STP Rate', suffix: '%', delta: '+6.7% MoM', deltaColor: '#10B981', sub: 'Auto-settled claims', icon: BoltIcon, iconColor: '#10B981', iconBg: 'rgba(16,185,129,0.1)' },
   { key: 'avg_triage_latency_seconds', label: 'Avg Triage Time', suffix: 's', delta: 'vs 4.2d manual', deltaColor: '#06B6D4', sub: 'Multi-agent processing', icon: AccessTimeIcon, iconColor: '#3B82F6', iconBg: 'rgba(59,130,246,0.1)' },
-  { key: 'fraud_leakage_prevented_dollars', label: 'Fraud Prevented', prefix: '$', delta: null, deltaColor: '', sub: 'High-risk claim savings', icon: ShieldIcon, iconColor: '#EF4444', iconBg: 'rgba(239,68,68,0.1)' },
-  { key: 'subrogation_opportunities_dollars', label: 'Subrogation Value', prefix: '$', delta: null, deltaColor: '', sub: 'Third-party recovery', icon: AccountBalanceIcon, iconColor: '#6366F1', iconBg: 'rgba(99,102,241,0.1)' },
+  { key: 'fraud_leakage_prevented_dollars', label: 'Fraud Prevented', prefix: '₹', delta: null, deltaColor: '', sub: 'High-risk claim savings', icon: ShieldIcon, iconColor: '#EF4444', iconBg: 'rgba(239,68,68,0.1)' },
+  { key: 'subrogation_opportunities_dollars', label: 'Subrogation Value', prefix: '₹', delta: null, deltaColor: '', sub: 'Third-party recovery', icon: AccountBalanceIcon, iconColor: '#6366F1', iconBg: 'rgba(99,102,241,0.1)' },
 ];
 
 export const KPIDashboard: React.FC<KPIDashboardProps> = ({ kpiData }) => {

@@ -103,9 +103,9 @@ export const WhatHappenedSection: React.FC<WhatHappenedSectionProps> = ({
             <TableRow>
               <TableHead>Line Item Description</TableHead>
               <TableHead>Category</TableHead>
-              <TableHead className="text-right">Claimed ($)</TableHead>
-              <TableHead className="text-right">Benchmark Approved</TableHead>
-              <TableHead className="text-right">Disallowed ($)</TableHead>
+              <TableHead className="text-right">Claimed (₹)</TableHead>
+              <TableHead className="text-right">Approved Amount</TableHead>
+              <TableHead className="text-right">Deducted (₹)</TableHead>
               <TableHead>Audit Finding</TableHead>
             </TableRow>
           </TableHeader>
@@ -132,9 +132,9 @@ export const WhatHappenedSection: React.FC<WhatHappenedSectionProps> = ({
                   </TableCell>
                   <TableCell className="text-xs text-right font-semibold tnum">
                     {disallowed > 0 ? (
-                      <span className="text-status-denied">-${disallowed.toFixed(2)}</span>
+                      <span className="text-status-denied">-{formatCurrency(disallowed)}</span>
                     ) : (
-                      <span className="text-muted">$0.00</span>
+                      <span className="text-muted">₹0.00</span>
                     )}
                   </TableCell>
                   <TableCell className="text-xs text-muted">
