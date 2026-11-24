@@ -33,6 +33,9 @@ env/
 
 # Database & Checkpointers
 *.db
+*.db-*
+*.db-shm
+*.db-wal
 *.sqlite3
 checkpoints.db
 claimflow.db
