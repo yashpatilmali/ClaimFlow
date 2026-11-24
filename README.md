@@ -1,10 +1,10 @@
 # ClaimFlow AI
 
-### Autonomous Multi-Agent Auto Claims Adjudication & Fraud Orchestrator
+### Smart AI System for Car Insurance Claims and Fraud Detection
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-v0.2+-FF6F00?style=flat&logo=chainlink&logoColor=white)](https://github.com/langchain-ai/langgraph)
-[![FastAPI](https://img.shields.io/badge/FastAPI-Async+SSE-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React 18](https://img.shields.io/badge/React-18.3-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -12,126 +12,138 @@
 
 ---
 
-## Overview
+## What is ClaimFlow AI?
 
-**ClaimFlow AI** is a production-grade multi-agent claims adjudication system designed for Property & Casualty (P&C) auto insurance. Traditional carrier claims pipelines suffer from manual triage delays (averaging 3-5 days per claim), inconsistent fraud detection, and calculation errors. 
+When you file a car insurance claim after an accident, insurance companies usually take **3 to 5 days** to review documents, verify repair bills, and calculate your payout.
 
-ClaimFlow AI replaces linear processing with a **Stateful 6-Agent LangGraph Orchestrator**:
+**ClaimFlow AI** uses a team of 6 specialized AI helpers to read repair bills, check insurance rules, detect fraud, and settle claims in **under 5 seconds**:
 
-- **Instant Auto-Approval (STP):** Clean, low-risk claims under ₹2,000 with active coverage and low fraud risk are auto-adjudicated in <600ms with automated settlement notices and Guidewire ClaimCenter CC v1 webhook payloads.
-- **Human-in-the-Loop (HITL) Governance:** High-value claims, fraud anomalies, third-party subrogation opportunities, or policy exclusions trigger durable LangGraph `interrupt()` checkpoints, pausing execution until a claims officer reviews and approves.
-- **Zero Hallucination Financial Math:** Pure deterministic Python math computes:
-  $$\text{Net Payout} = \max\Big(0.0, \min(\text{Approved Cost}, \text{Coverage Limit}) - \text{Deductible}\Big)$$
-  guaranteeing LLMs never perform financial arithmetic.
-- **Indian Financial Localization:** Full native support for Indian currency (`₹`), Indian numbering formats (`1,00,000`, lakhs, and crores), `DD/MM/YYYY` dates, and `IST` time stamps.
+- **Instant Approval:** Normal claims under ₹2,000 with genuine repair bills are approved immediately.
+- **Officer Review:** Suspicious claims, high repair bills, or cases where the other driver was at fault are paused for a human claims officer to check and sign off.
+- **Accurate Math:** Exact payout math is calculated by fixed formulas — the AI never guesses dollar or rupee amounts.
+- **Made for India:** Shows all amounts in Indian Rupees (`₹`), uses Indian number style (like `₹2.5 lakh`), dates in `DD/MM/YYYY`, and times in `IST`.
+- **Works 100% Free & Offline:** Comes with a built-in test AI, so you can run the whole app on your computer without paying for any API keys.
 
 ---
 
-## Multi-Agent Architecture
+## How It Works
 
 ```mermaid
 flowchart TD
-    Start([First Notice of Loss: Repair Invoice PDF + Narrative]) --> Redact[Local PII Redaction Gate<br/>Masks Phone, Email, Policy ID, VIN]
-    Redact --> Intake[1. Intake Agent<br/>FNOL Extraction & Line-Item Audit]
+    Start([1. You submit a claim with repair bill & accident story]) --> Intake[Intake Helper: Reads bill items and car details]
     
-    subgraph ParallelChecks [Parallel Analysis Layer]
-        Intake --> Policy[2. Policy Agent<br/>Hybrid Policy RAG Validator]
-        Intake --> Fraud[3. Fraud Agent<br/>Risk Classifier & Red-Flag Checks]
-        Intake --> Subro[4. Subrogation Agent<br/>Third-Party Liability Spotter]
+    subgraph Checks [3 Instant Checks in Parallel]
+        Intake --> Policy[Policy Helper: Checks if your policy covers this damage]
+        Intake --> Fraud[Fraud Helper: Checks for fake bills or suspicious details]
+        Intake --> Subro[Fault Helper: Checks if another driver caused the crash]
     end
     
-    Policy --> Estimator[5. Estimator Agent<br/>Standard Cost Benchmark & Deterministic Math]
+    Policy --> Estimator[Estimator Helper: Checks fair repair costs & calculates payout]
     Fraud --> Estimator
     Subro --> Estimator
     
-    Estimator --> Adjudicator{6. Adjudicator Agent<br/>Governance & Routing Rules}
+    Estimator --> Decision{Decision Helper: Can this be approved right away?}
     
-    Adjudicator -->|STP: Covered, Risk < 30, Payout < ₹2k| STP[Instant Auto-Approval<br/>• Settlement Notice<br/>• Guidewire Integration]
-    Adjudicator -->|Exceptions: Risk ≥ 30, Payout ≥ ₹2k, Subro| HITL[LangGraph interrupt Checkpoint<br/>Status: Awaiting Claims Officer Review]
-    
-    HITL --> HumanAction[Claims Officer Action:<br/>Approve | Override Payout | Deny | Refer to SIU]
-    HumanAction --> FinalDecision[Resume Graph Checkpoint & Finalize Claim]
+    Decision -->|Yes: Safe claim under ₹2,000| Approved[Instant Approval: Payout approved & letter issued]
+    Decision -->|No: Needs a human check| Review[Paused for Officer Review: Human officer reviews & approves]
 ```
 
 ---
 
-## The 6 Specialized Agents
+## The 6 AI Helpers
 
-| # | Agent Name | Execution | Role & Capabilities |
-|:---:|:---|:---:|:---|
-| **1** | **`intake_agent`** | Sequential | Extracts loss date, vehicle details, damaged parts, and repair line items from PDFs/invoices. Runs a self-check loop reconciling sums against stated invoice totals. |
-| **2** | **`policy_agent`** | Parallel | Verifies coverage dates and terms against policy documents. Conducts hybrid RAG search to provide verbatim policy citations (`section_ref`, `page_num`, `quote`). |
-| **3** | **`fraud_agent`** | Parallel | Combines ML risk classification with deterministic rule checks (short policy inception, parts mismatch, adversarial prompt injection) to compute a 0-100 `fraud_risk_score`. |
-| **4** | **`subrogation_agent`** | Parallel | Scans police reports and narratives for third-party liability cues (rear-end collisions, freight carriers, citations) to identify recovery opportunities. |
-| **5** | **`estimator_agent`** | Consolidation | Benchmarks parts and labor rates against automotive repair standards, applying deterministic Python formulas for financial settlement calculations. |
-| **6** | **`adjudicator_agent`** | Decision Router | Applies compliance governance rules. Automatically routes low-risk claims for instant payout or pauses state at durable checkpointers for human sign-off. |
-
----
-
-## Key Features
-
-- **Built-in MockLLM:** Runs 100% offline out-of-the-box with zero API keys required for development, testing, and CI/CD.
-- **Gemini & Groq Support:** Seamlessly connect Google Gemini (`gemini-1.5-flash`) or Groq (`llama-3.3-70b-versatile`) by setting your API key in `.env`.
-- **Claims Officer Workbench:** Clean, modern React dashboard with real-time SSE execution telemetry, timeline graph view, decision override sliders, and printable audit letters.
-- **Robust Security:** Pre-execution PII redaction layer and prompt-injection quarantine defenses protect against adversarial manipulation.
+| # | Helper Name | What It Does |
+|:---:|:---|:---|
+| **1** | **Intake Helper** | Reads the uploaded repair bill or PDF, lists each replaced part and labor cost, and checks that the bill totals add up correctly. |
+| **2** | **Policy Helper** | Reads your insurance policy document to confirm the accident date falls within your active policy and is covered. |
+| **3** | **Fraud Helper** | Gives a safety risk score from 0 to 100. Catches red flags like claims filed right after buying insurance or mismatched repair bills. |
+| **4** | **Fault Helper** | Checks police reports and accident stories to see if another driver or delivery truck caused the crash, so the company can recover costs. |
+| **5** | **Estimator Helper** | Compares repair prices against standard market rates, removes overcharged amounts, subtracts your deductible, and calculates the final payout. |
+| **6** | **Decision Helper** | Makes the final call: instantly approves clean, low-cost claims, or sends high-cost and suspicious claims to a human officer. |
 
 ---
 
-## Quick Start
+## Easy 3-Step Setup
 
-### 1. Clone Repository
+You do **not** need any paid API keys or complicated setup. Everything runs locally on your computer.
+
+### Step 1: Download the Project
 ```bash
 git clone https://github.com/yashpatilmali/ClaimFlow.git
 cd ClaimFlow
 ```
 
-### 2. Setup Environment
+### Step 2: Install Everything
 ```bash
-# Automated cross-platform setup (installs Python & Node dependencies)
+# This installs all Python and frontend packages automatically
 python scripts/dev.py setup
 ```
 
-### 3. Run Development Servers
+### Step 3: Start the App
 ```bash
-# Starts FastAPI (port 8000) and Vite frontend (port 5173) concurrently
+# Starts both the backend and web interface together
 python scripts/dev.py start
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser to access the ClaimFlow Workbench.
+Now open **[http://localhost:5173](http://localhost:5173)** in your browser!
 
 ---
 
-## Specimen Test Suite
+## Using Real AI (Optional)
 
-ClaimFlow includes 19 pre-configured test packets covering real-world edge cases:
+By default, ClaimFlow runs on **MockLLM** (a built-in offline simulation that costs ₹0). 
 
-| Case | Scenario | Focus Area | Expected Outcome |
-|:---|:---|:---|:---|
-| **TC01** | Clean Bumper Repair | Minor parking bump, low cost | Instant Auto-Approval (`APPROVED_STP`) |
-| **TC02** | Street Racing Exclusion | Speed contest on public road | Paused for Review (`PENDING_HITL` - Exclusion) |
-| **TC03** | Inflated Roof Repair | Narrative vs. invoice mismatch | Paused for Review (`PENDING_HITL` - Fraud/SIU) |
-| **TC04** | Commercial Freight Crash | Commercial truck liability | Paused for Review (`PENDING_HITL` - Recovery) |
-| **TC05** | Claim Below Deductible | Repair cost under deductible | Instant Auto-Approval (`₹0.00` payout) |
-| **TC11** | High Payout Repair | Exceeds ₹2,000 threshold | Paused for Review (`PENDING_HITL` - High Value) |
-| **TC13** | Prompt Injection Attack | Adversarial override attempt | Quarantined (`PENDING_HITL` - Security Alert) |
+If you want to use live AI to read your own custom documents, you can add a free API key from **Google Gemini** or **Groq**:
 
-Run automated test assertions anytime:
-```bash
-python scripts/dev.py test       # Run 22 backend pytest tests
-python scripts/dev.py smoke      # Run end-to-end smoke test
+1. Copy `.env.example` to `.env`.
+2. Add your key and set `MOCK_LLM=false`:
+
+```env
+# If using Google Gemini (Recommended)
+GEMINI_API_KEY=your_gemini_api_key_here
+MOCK_LLM=false
+
+# OR if using Groq (Super fast)
+GROQ_API_KEY=your_groq_api_key_here
+MOCK_LLM=false
 ```
 
 ---
 
-## Tech Stack
+## Ready-to-Test Sample Scenarios
 
-- **Backend:** Python 3.11+, FastAPI, LangGraph, LangChain, Pydantic v2, SQLite / aiosqlite
-- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Radix UI, Lucide Icons
-- **AI Models:** Google Gemini (`gemini-1.5-flash`), Groq (`llama-3.3-70b-versatile`), and deterministic `MockLLM`
-- **Testing:** Pytest, Playwright, Python Unit & E2E Evals
+The app includes 19 ready-to-test sample cases you can try with one click in the **Test Lab**:
+
+| Case | What Happened | What the AI Does |
+|:---|:---|:---|
+| **Clean Bumper Repair** | Small parking scratch, repair bill is ₹850 | **Approved in seconds** |
+| **Street Racing Crash** | Car crashed during an illegal street race | **Paused** (Street racing is not covered) |
+| **Inflated Repair Bill** | Small mirror damage, but invoice asks for ₹6,800 roof replacement | **Paused** (Flagged for fraud investigation) |
+| **Truck Rear-End** | Stopped at red light and hit by a delivery truck | **Paused** (Sent for other driver recovery) |
+| **Under Deductible** | Repair bill is ₹250, but policy deductible is ₹500 | **Approved with ₹0 payout** |
+| **High Repair Cost** | Repair costs exceed ₹2,000 threshold | **Paused** for claims officer sign-off |
+
+---
+
+## Helpful Commands
+
+```bash
+python scripts/dev.py test       # Runs all 22 backend automated tests
+python scripts/dev.py smoke      # Runs a full end-to-end check of all cases
+python scripts/dev.py reset      # Cleans and resets the database back to initial state
+```
+
+---
+
+## Technology Behind the App
+
+- **Python & FastAPI:** Fast, modern backend service.
+- **LangGraph:** Orchestrates the 6 AI helpers and pauses claims safely for human sign-off.
+- **React & Tailwind CSS:** Clean, responsive web dashboard that works on both desktop and mobile.
+- **AI Models:** Google Gemini, Groq, and built-in offline MockLLM.
 
 ---
 
 ## License
 
-Distributed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
