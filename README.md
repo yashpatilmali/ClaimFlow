@@ -1,158 +1,137 @@
-<div align="center">
-
 # ClaimFlow AI
-### Autonomous Multi-Agent P&C Auto Claims Adjudication, Fraud & Subrogation Orchestrator
-**Production-Grade Architecture for Property & Casualty Auto Insurance**
 
-[![CI Status](https://github.com/claimflow/claimflow-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/claimflow/claimflow-ai/actions)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![LangGraph](https://img.shields.io/badge/Orchestrator-LangGraph_v0.2+-orange.svg)](https://github.com/langchain-ai/langgraph)
-[![FastAPI](https://img.shields.io/badge/API-FastAPI_Async+SSE-009688.svg)](https://fastapi.tiangolo.com/)
-[![React 18](https://img.shields.io/badge/Frontend-React_18+TypeScript+Vite-61DAFB.svg)](https://reactjs.org/)
-[![Radix UI](https://img.shields.io/badge/Design_System-Radix_UI+Tailwind-18304F.svg)](https://www.radix-ui.com/)
-[![Zero Paid Dependencies](https://img.shields.io/badge/Zero_Cost-100%25_Free_Tier_or_Offline-brightgreen.svg)]()
+### Autonomous Multi-Agent Auto Claims Adjudication & Fraud Orchestrator
 
-</div>
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-v0.2+-FF6F00?style=flat&logo=chainlink&logoColor=white)](https://github.com/langchain-ai/langgraph)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Async+SSE-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React 18](https://img.shields.io/badge/React-18.3-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
-## 1. Executive Summary
+## Overview
 
-**ClaimFlow AI** is an enterprise-grade multi-agent claims adjudication system designed to transform Property & Casualty (P&C) auto claims processing. 
+**ClaimFlow AI** is a production-grade multi-agent claims adjudication system designed for Property & Casualty (P&C) auto insurance. Traditional carrier claims pipelines suffer from manual triage delays (averaging 3-5 days per claim), inconsistent fraud detection, and calculation errors. 
 
-Traditional carrier claims pipelines suffer from manual triage latency (averaging 3–5 days per claim), inconsistent fraud detection leakage, delayed subrogation identification, and floating-point errors in automated payout calculations.
+ClaimFlow AI replaces linear processing with a **Stateful 6-Agent LangGraph Orchestrator**:
 
-**ClaimFlow AI** replaces legacy linear scripts with a **Stateful 6-Agent LangGraph Orchestrator**:
-- **Straight-Through Processing (STP):** Clean, non-suspicious claims under $2,000 with active coverage and low fraud risk are auto-adjudicated in <600ms, automatically generating an electronic settlement notice and a synchronized **Guidewire ClaimCenter (CC) v1 API payload**.
-- **Human-in-the-Loop (HITL) Governance:** High-dollar claims, fraud anomalies, third-party subrogation opportunities, or policy exclusions trigger durable LangGraph `interrupt()` checkpoints, pausing execution until a licensed claims adjuster reviews and signs off with mandatory audit notes.
+- **Instant Auto-Approval (STP):** Clean, low-risk claims under ₹2,000 with active coverage and low fraud risk are auto-adjudicated in <600ms with automated settlement notices and Guidewire ClaimCenter CC v1 webhook payloads.
+- **Human-in-the-Loop (HITL) Governance:** High-value claims, fraud anomalies, third-party subrogation opportunities, or policy exclusions trigger durable LangGraph `interrupt()` checkpoints, pausing execution until a claims officer reviews and approves.
 - **Zero Hallucination Financial Math:** Pure deterministic Python math computes:
   $$\text{Net Payout} = \max\Big(0.0, \min(\text{Approved Cost}, \text{Coverage Limit}) - \text{Deductible}\Big)$$
-  guaranteeing the LLM never executes financial payout arithmetic.
-- **Adjuster Desk UX:** Designed around a claims adjuster's physical desk with an Ink & Paper palette, self-hosted IBM Plex typography, sticky case file navigation, and a bold ruling block with a complete governance rule checklist.
+  guaranteeing LLMs never perform financial arithmetic.
+- **Indian Financial Localization:** Full native support for Indian currency (`₹`), Indian numbering formats (`1,00,000`, lakhs, and crores), `DD/MM/YYYY` dates, and `IST` time stamps.
 
 ---
 
-## 2. Multi-Agent Architecture Topology
+## Multi-Agent Architecture
 
 ```mermaid
-graph TD
-    Start([First Notice of Loss: Repair Invoice PDF + Narrative]) --> Redact[Local PII Redaction Gate<br/>Masks SSN, Phone, Email, Policy ID, VIN]
-    Redact --> Intake[1. intake_agent: FNOL & IDP Extraction + Self-Check Loop]
+flowchart TD
+    Start([First Notice of Loss: Repair Invoice PDF + Narrative]) --> Redact[Local PII Redaction Gate<br/>Masks Phone, Email, Policy ID, VIN]
+    Redact --> Intake[1. Intake Agent<br/>FNOL Extraction & Line-Item Audit]
     
-    subgraph Parallel Analysis [Parallel Fan-Out Execution]
-        Intake --> Policy[2. policy_agent: Hybrid Policy RAG Validator]
-        Intake --> Fraud[3. fraud_agent: Hybrid ML Classifier + SQL Red-Flags]
-        Intake --> Subro[4. subrogation_agent: Third-Party Recovery Spotter]
+    subgraph ParallelChecks [Parallel Analysis Layer]
+        Intake --> Policy[2. Policy Agent<br/>Hybrid Policy RAG Validator]
+        Intake --> Fraud[3. Fraud Agent<br/>Risk Classifier & Red-Flag Checks]
+        Intake --> Subro[4. Subrogation Agent<br/>Third-Party Liability Spotter]
     end
     
-    Policy --> Estimator[5. estimator_agent: Benchmark Line-Item Audit + Deterministic Math]
+    Policy --> Estimator[5. Estimator Agent<br/>Standard Cost Benchmark & Deterministic Math]
     Fraud --> Estimator
     Subro --> Estimator
     
-    Estimator --> Adjudicator{6. adjudicator_agent: Governance & STP Routing Rules}
+    Estimator --> Adjudicator{6. Adjudicator Agent<br/>Governance & Routing Rules}
     
-    Adjudicator -->|STP Criteria Met: Covered, Risk < 30, Payout < $2k, No High Subro| STP[Status: APPROVED_STP<br/>• Settlement Letter<br/>• Guidewire ClaimCenter Webhook]
-    Adjudicator -->|Exceptions: Exclusion, Risk ≥ 30, Payout ≥ $2k, High Subro| HITL[LangGraph interrupt()<br/>Status: PENDING_HITL<br/>Saved in Durable Checkpointer]
+    Adjudicator -->|STP: Covered, Risk < 30, Payout < ₹2k| STP[Instant Auto-Approval<br/>• Settlement Notice<br/>• Guidewire Integration]
+    Adjudicator -->|Exceptions: Risk ≥ 30, Payout ≥ ₹2k, Subro| HITL[LangGraph interrupt Checkpoint<br/>Status: Awaiting Claims Officer Review]
     
-    HITL --> HumanAction[Adjuster Workbench Action:<br/>APPROVE | OVERRIDE_PAYOUT | DENY | REFER_SIU<br/>+ Mandatory Audit Justification]
-    HumanAction --> ResumeGraph[Resume LangGraph Checkpoint & Finalize Decision]
+    HITL --> HumanAction[Claims Officer Action:<br/>Approve | Override Payout | Deny | Refer to SIU]
+    HumanAction --> FinalDecision[Resume Graph Checkpoint & Finalize Claim]
 ```
 
 ---
 
-## 3. The 6 Specialized Agents
+## The 6 Specialized Agents
 
-| # | Agent Name | Execution Mode | Responsibilities & Tools |
+| # | Agent Name | Execution | Role & Capabilities |
 |:---:|:---|:---:|:---|
-| **1** | **`intake_agent`** | Sequential Entry | Extracts loss date, loss type, damaged parts, mechanic line items, and stated totals using `pymupdf` (`fitz`). Runs a self-check loop reconciling line-item sums against invoice totals. |
-| **2** | **`policy_agent`** | Parallel Fan-Out | Verifies active policy dates against loss date. Runs hybrid retrieval (keyword + section chunking) over policy PDFs to validate coverage and provide verbatim policy citations (`section_ref`, `page_num`, `quote`). |
-| **3** | **`fraud_agent`** | Parallel Fan-Out | Combines tabular ML (Gradient Boosting trained on Kaggle P&C features) with deterministic red-flag rules (policy bound < 15 days, parts discrepancy, prompt injection triggers) to output a 0–100 `fraud_risk_score`. |
-| **4** | **`subrogation_agent`** | Parallel Fan-Out | Scans police report and narrative for adverse liability cues (stationary vehicle at red light, commercial freight carriers, police citations). Estimates recovery potential and drafts referral brief. |
-| **5** | **`estimator_agent`** | Fan-In (Consolidation) | Audits mechanic line items against automotive repair benchmarks (capping parts and hourly labor rates), then strictly executes **pure Python deterministic math** for financial payout calculation. |
-| **6** | **`adjudicator_agent`** | Sequential Router | Evaluates compliance governance. If all STP criteria pass, generates settlement notice and Guidewire webhook. If exceptions trigger, invokes LangGraph `interrupt()`, persisting state until adjuster decision. |
+| **1** | **`intake_agent`** | Sequential | Extracts loss date, vehicle details, damaged parts, and repair line items from PDFs/invoices. Runs a self-check loop reconciling sums against stated invoice totals. |
+| **2** | **`policy_agent`** | Parallel | Verifies coverage dates and terms against policy documents. Conducts hybrid RAG search to provide verbatim policy citations (`section_ref`, `page_num`, `quote`). |
+| **3** | **`fraud_agent`** | Parallel | Combines ML risk classification with deterministic rule checks (short policy inception, parts mismatch, adversarial prompt injection) to compute a 0-100 `fraud_risk_score`. |
+| **4** | **`subrogation_agent`** | Parallel | Scans police reports and narratives for third-party liability cues (rear-end collisions, freight carriers, citations) to identify recovery opportunities. |
+| **5** | **`estimator_agent`** | Consolidation | Benchmarks parts and labor rates against automotive repair standards, applying deterministic Python formulas for financial settlement calculations. |
+| **6** | **`adjudicator_agent`** | Decision Router | Applies compliance governance rules. Automatically routes low-risk claims for instant payout or pauses state at durable checkpointers for human sign-off. |
 
 ---
 
-## 4. Try in 60 Seconds
+## Key Features
 
-ClaimFlow AI runs locally out of the box with zero paid API keys (`MOCK_LLM=true` default with SQLite).
+- **Built-in MockLLM:** Runs 100% offline out-of-the-box with zero API keys required for development, testing, and CI/CD.
+- **Gemini & Groq Support:** Seamlessly connect Google Gemini (`gemini-1.5-flash`) or Groq (`llama-3.3-70b-versatile`) by setting your API key in `.env`.
+- **Claims Officer Workbench:** Clean, modern React dashboard with real-time SSE execution telemetry, timeline graph view, decision override sliders, and printable audit letters.
+- **Robust Security:** Pre-execution PII redaction layer and prompt-injection quarantine defenses protect against adversarial manipulation.
 
+---
+
+## Quick Start
+
+### 1. Clone Repository
 ```bash
-# 1. Clone repository
-git clone https://github.com/claimflow/claimflow-ai.git
-cd claimflow-ai
+git clone https://github.com/yashpatilmali/ClaimFlow.git
+cd ClaimFlow
+```
 
-# 2. Automated cross-platform setup (installs deps & builds test kit)
+### 2. Setup Environment
+```bash
+# Automated cross-platform setup (installs Python & Node dependencies)
 python scripts/dev.py setup
+```
 
-# 3. Start dev servers (FastAPI port 8000 + Vite port 5173)
+### 3. Run Development Servers
+```bash
+# Starts FastAPI (port 8000) and Vite frontend (port 5173) concurrently
 python scripts/dev.py start
 ```
 
-Open `http://localhost:5173` to access the ClaimFlow AI Adjuster Workbench.
+Open [http://localhost:5173](http://localhost:5173) in your browser to access the ClaimFlow Workbench.
 
 ---
 
-## 5. Ready-to-Use Specimen Test Kit (TC01–TC19)
+## Specimen Test Suite
 
-The repository includes 19 pre-generated synthetic test packets in `test_kit/packets/`:
+ClaimFlow includes 19 pre-configured test packets covering real-world edge cases:
 
-| Packet ID | Case Name | Key Trait | Expected Status | Net Payout | Specimen Documents |
-|---|---|---|---|---|---|
-| **TC01** | Clean Bumper Repair | Minor parking tap, low cost | `APPROVED_STP` | $850.00 | Invoice PDF |
-| **TC02** | Street Racing Exclusion | Speed contest on public road | `PENDING_HITL` (Exclusion) | $0.00 | Police Report PDF |
-| **TC03** | Inflated Roof Repair | Narrative vs invoice mismatch | `PENDING_HITL` (SIU) | $0.00 | Damage Photo PNG |
-| **TC04** | Commercial Carrier Collision | Adverse commercial freight truck | `PENDING_HITL` (Subro) | $1,900.00 | Police Report PDF |
-| **TC05** | Loss Less Than Deductible | Claim below $500 deductible | `APPROVED_STP` | $0.00 | Invoice PDF |
-| **TC06** | Inception Proximity Fraud | Policy bound 4 days prior | `PENDING_HITL` (SIU) | $0.00 | Invoice PDF |
-| **TC07** | Extreme Labor Padding | 32 hours labor on fender | `PENDING_HITL` (Fraud) | $1,240.00 | Invoice PDF |
-| **TC08** | Commercial Fleet Subrogation | Delivery fleet rear-end | `PENDING_HITL` (Subro) | $3,150.00 | Police Report PDF |
-| **TC09** | Glass Windshield Replacement | Clean comprehensive glass | `APPROVED_STP` | $350.00 | Invoice PDF |
-| **TC10** | Headlight Housing Assembly | Low-cost lighting replacement | `APPROVED_STP` | $420.00 | Invoice PDF |
-| **TC11** | High Dollar Collision Repair | Exceeds $2,000 threshold | `PENDING_HITL` (Payout) | $3,450.00 | Invoice PDF |
-| **TC12** | Ridesharing Without Endorsement | Commercial ridesharing exclusion | `PENDING_HITL` (Exclusion) | $0.00 | Police Report PDF |
-| **TC13** | Prompt Injection Defense | Quarantined adversarial payload | `PENDING_HITL` (SIU) | $0.00 | Narrative File |
-| **TC14** | Admitted Intentional Damage | Exclusion clause 4.A | `PENDING_HITL` (Exclusion) | $0.00 | Police Report PDF |
-| **TC15** | Side Mirror Dent | Low-cost parking brush | `APPROVED_STP` | $280.00 | Invoice PDF |
-| **TC16** | Unwitnessed Hit-and-Run | Lacks police documentation | `PENDING_HITL` (Audit) | $1,100.00 | Damage Photo PNG |
-| **TC17** | Multiple Parts Mismatch | Parts discrepancy red flags | `PENDING_HITL` (SIU) | $0.00 | Invoice PDF |
-| **TC18** | Disputed Red Light Liability | Partial adverse fault | `PENDING_HITL` (Subro) | $1,800.00 | Police Report PDF |
-| **TC19** | Total Loss Valuation Boundary | Repair cost exceeds vehicle ACV | `PENDING_HITL` (Total Loss) | $18,500.00 | Invoice PDF |
+| Case | Scenario | Focus Area | Expected Outcome |
+|:---|:---|:---|:---|
+| **TC01** | Clean Bumper Repair | Minor parking bump, low cost | Instant Auto-Approval (`APPROVED_STP`) |
+| **TC02** | Street Racing Exclusion | Speed contest on public road | Paused for Review (`PENDING_HITL` - Exclusion) |
+| **TC03** | Inflated Roof Repair | Narrative vs. invoice mismatch | Paused for Review (`PENDING_HITL` - Fraud/SIU) |
+| **TC04** | Commercial Freight Crash | Commercial truck liability | Paused for Review (`PENDING_HITL` - Recovery) |
+| **TC05** | Claim Below Deductible | Repair cost under deductible | Instant Auto-Approval (`₹0.00` payout) |
+| **TC11** | High Payout Repair | Exceeds ₹2,000 threshold | Paused for Review (`PENDING_HITL` - High Value) |
+| **TC13** | Prompt Injection Attack | Adversarial override attempt | Quarantined (`PENDING_HITL` - Security Alert) |
 
-### Test Kit Utilities
-- **Interactive UI Test Lab (`/test-lab`):** View catalog cards, load into wizard, run direct, and batch run all 19 cases.
-- **Postman & HTTP Collection:** `test_kit/api/claimflow.postman_collection.json` and `test_kit/api/claimflow.http`.
-- **Smoke Test Script:** `python scripts/dev.py smoke` (generates `test_kit/results/latest.md`).
+Run automated test assertions anytime:
+```bash
+python scripts/dev.py test       # Run 22 backend pytest tests
+python scripts/dev.py smoke      # Run end-to-end smoke test
+```
 
 ---
 
-## 6. Developer CLI Commands (`scripts/dev.py`)
+## Tech Stack
 
-| Command | Action |
-|---|---|
-| `python scripts/dev.py setup` | Installs Python & Node packages and generates specimen test kit |
-| `python scripts/dev.py start` | Starts FastAPI (8000) and Vite (5173) concurrently |
-| `python scripts/dev.py test` | Runs backend `pytest` suite (22 unit & integration tests) |
-| `python scripts/dev.py evals` | Runs 15-case LangGraph golden evaluation suite |
-| `python scripts/dev.py smoke` | Runs automated smoke test assertions |
-| `python scripts/dev.py e2e` | Runs Playwright end-to-end and accessibility checks |
-| `python scripts/dev.py reset` | Resets demo database to clean 4 demo cases |
-| `python scripts/dev.py test-kit` | Regenerates all 19 specimen test packets |
+- **Backend:** Python 3.11+, FastAPI, LangGraph, LangChain, Pydantic v2, SQLite / aiosqlite
+- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Radix UI, Lucide Icons
+- **AI Models:** Google Gemini (`gemini-1.5-flash`), Groq (`llama-3.3-70b-versatile`), and deterministic `MockLLM`
+- **Testing:** Pytest, Playwright, Python Unit & E2E Evals
 
 ---
 
-## 7. Documentation & References
+## License
 
-- [Enhancement & Migration Plan](docs/ENHANCEMENT_PLAN.md): Detailed 8-phase audit, wireframes, and verification checklist.
-- [Design System Guide](docs/DESIGN_SYSTEM.md): Palette tokens, IBM Plex typography scale, and Ruling block specifications.
-- [User Guide & Adjuster Walkthrough](docs/USER_GUIDE.md): Practical tutorial for straight-through adjudication and human-in-the-loop sign-off.
-- [Evaluation Results](evals/eval_results.md): 15-case LangGraph benchmark report.
-
----
-
-<div align="center">
-Crafted for Modern Auto Insurance Claims Automation
-</div>
-#   C l a i m F l o w  
- #   C l a i m F l o w  
- 
+Distributed under the MIT License.
